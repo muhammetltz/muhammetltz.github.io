@@ -1,100 +1,378 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Firebase Sohbet</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background:#fafafa; }
-  #chat { max-width: 600px; margin: auto; }
-  #messages { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; background: white; }
-  #messages div { margin-bottom: 8px; }
-  #messages div span { font-weight: bold; margin-right: 5px; }
-  #inputArea { margin-top: 10px; display: flex; }
-  #userName, #messageInput { padding: 8px; font-size: 16px; }
-  #userName { width: 150px; margin-right: 10px; }
-  #messageInput { flex: 1; }
-  #sendBtn { padding: 8px 15px; margin-left: 10px; font-size: 16px; cursor: pointer; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sohbet Platformu</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #app {
+      width: 100%;
+      max-width: 900px;
+      height: 600px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    /* Giriş ekranı */
+    #loginScreen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #loginScreen input {
+      padding: 10px 15px;
+      font-size: 18px;
+      width: 250px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    #loginScreen input:focus {
+      border-color: #1877f2;
+    }
+    #loginScreen button {
+      background: #1877f2;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #loginScreen button:hover {
+      background: #155db2;
+    }
+
+    /* Ana sohbet ekranı */
+    #chatScreen {
+      display: none;
+      flex: 1;
+      display: flex;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    /* Kişi listesi */
+    #userList {
+      width: 220px;
+      background: #f7f7f7;
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    #userList h2 {
+      margin: 15px;
+      font-size: 20px;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .userItem {
+      padding: 12px 20px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      transition: background 0.3s;
+    }
+    .userItem:hover {
+      background: #e4e6eb;
+    }
+    .userItem.active {
+      background: #1877f2;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Sohbet bölümü */
+    #chatWindow {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: white;
+    }
+    #chatHeader {
+      padding: 15px 20px;
+      background: #1877f2;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border-bottom: 1px solid #0f57d7;
+    }
+    #messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #e5ddd5;
+    }
+    .message {
+      max-width: 70%;
+      margin-bottom: 12px;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 16px;
+      line-height: 1.3;
+      word-wrap: break-word;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+      clear: both;
+    }
+    .message .sender {
+      font-weight: 700;
+      margin-bottom: 5px;
+      display: block;
+    }
+    /* Gelen mesajlar */
+    .message.received {
+      background: white;
+      float: left;
+      border-top-left-radius: 0;
+    }
+    /* Gönderilen mesajlar */
+    .message.sent {
+      background: #dcf8c6;
+      float: right;
+      border-top-right-radius: 0;
+    }
+    /* Mesaj kutusu */
+    #inputArea {
+      padding: 10px 15px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      background: #f7f7f7;
+    }
+    #inputArea input {
+      flex: 1;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    #inputArea input:focus {
+      border-color: #1877f2;
+    }
+    #sendBtn {
+      background: #1877f2;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 18px;
+      margin-left: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+    #sendBtn:disabled {
+      background: #a1c1f7;
+      cursor: default;
+    }
+
+    /* Scroll stil */
+    #messages::-webkit-scrollbar {
+      width: 8px;
+    }
+    #messages::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 4px;
+    }
+
+  </style>
 </head>
 <body>
+  <div id="app">
+    <!-- Giriş Ekranı -->
+    <div id="loginScreen">
+      <h2>Hoşgeldiniz!</h2>
+      <input id="usernameInput" placeholder="Adınızı girin" autocomplete="off" />
+      <button id="loginBtn">Giriş Yap</button>
+    </div>
 
-<div id="chat">
-  <div>
-    <input id="userName" placeholder="Adınız" maxlength="20" />
+    <!-- Sohbet Ekranı -->
+    <div id="chatScreen">
+      <div id="userList">
+        <h2>Kullanıcılar</h2>
+        <div id="usersContainer"></div>
+      </div>
+      <div id="chatWindow">
+        <div id="chatHeader">Sohbet</div>
+        <div id="messages"></div>
+        <form id="inputArea">
+          <input id="messageInput" autocomplete="off" placeholder="Mesajınızı yazın..." />
+          <button id="sendBtn" disabled type="submit" title="Gönder">&#9658;</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <div id="messages"></div>
-  <div id="inputArea">
-    <input id="messageInput" placeholder="Mesajınızı yazın..." maxlength="200" />
-    <button id="sendBtn" disabled>Gönder</button>
-  </div>
-</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  // Firebase yapılandırman (senin verdiğin)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
-    authDomain: "sohbet-31244.firebaseapp.com",
-    databaseURL: "https://sohbet-31244-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "sohbet-31244",
-    storageBucket: "sohbet-31244.appspot.com",
-    messagingSenderId: "22460967347",
-    appId: "1:22460967347:web:7fce6b4d75fd78bbac83c6",
-    measurementId: "G-RDTHWG6FCR"
-  };
+    // Firebase config - kendi bilgilerinle değiştir!
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
+      authDomain: "sohbet-31244.firebaseapp.com",
+      databaseURL: "https://sohbet-31244-default-rtdb.firebaseio.com/",
+      projectId: "sohbet-31244",
+      storageBucket: "sohbet-31244.appspot.com",
+      messagingSenderId: "22460967347",
+      appId: "1:22460967347:web:7fce6b4d75fd78bbac83c6",
+      measurementId: "G-RDTHWG6FCR"
+    };
 
-  // Firebase başlat
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  const userNameInput = document.getElementById('userName');
-  const messageInput = document.getElementById('messageInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const messagesDiv = document.getElementById('messages');
+    // DOM elemanları
+    const loginScreen = document.getElementById('loginScreen');
+    const chatScreen = document.getElementById('chatScreen');
+    const usernameInput = document.getElementById('usernameInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const usersContainer = document.getElementById('usersContainer');
+    const chatHeader = document.getElementById('chatHeader');
+    const messages = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const inputArea = document.getElementById('inputArea');
 
-  // Mesaj ve isim temizleme
-  function sanitize(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+    let currentUser = null;
+    let currentChatUser = null;
+    let users = [];
 
-  // Gönder butonunu aktif/pasif yap
-  function toggleSendBtn() {
-    sendBtn.disabled = !(userNameInput.value.trim() && messageInput.value.trim());
-  }
+    // Kullanıcı giriş yapınca
+    loginBtn.onclick = () => {
+      const name = usernameInput.value.trim();
+      if(name.length < 1) {
+        alert("Lütfen geçerli bir isim girin.");
+        return;
+      }
+      currentUser = name;
+      loginScreen.style.display = 'none';
+      chatScreen.style.display = 'flex';
+      loadUsers();
+    };
 
-  userNameInput.addEventListener('input', toggleSendBtn);
-  messageInput.addEventListener('input', toggleSendBtn);
+    // Kullanıcı listesini yükle - şimdilik sadece sabit örnekler
+    // Bunu Firebase'den de çekip, dinamik yapabilirsin.
+    function loadUsers() {
+      // Örnek kullanıcılar - kendin değiştir veya Firebase'den al
+      users = ["Ali", "Ayşe", "Mehmet", "Fatma", "Zeynep"];
 
-  // Mesaj gönder
-  sendBtn.addEventListener('click', () => {
-    const name = userNameInput.value.trim();
-    const msg = messageInput.value.trim();
-    if (!name || !msg) return;
+      // Kendi kullanıcı adını listeye ekleme
+      users = users.filter(u => u !== currentUser);
 
-    push(ref(db, 'messages'), {
-      name,
-      message: msg,
-      timestamp: Date.now()
-    }).then(() => {
-      messageInput.value = '';
-      toggleSendBtn();
-    });
-  });
+      usersContainer.innerHTML = "";
+      users.forEach(u => {
+        const div = document.createElement("div");
+        div.textContent = u;
+        div.classList.add("userItem");
+        div.onclick = () => {
+          selectChatUser(u);
+        };
+        usersContainer.appendChild(div);
+      });
+    }
 
-  // Yeni mesajları dinle ve göster
-  onChildAdded(ref(db, 'messages'), (data) => {
-    const { name, message } = data.val();
-    const msgDiv = document.createElement('div');
-    msgDiv.innerHTML = `<span>${sanitize(name)}:</span> ${sanitize(message)}`;
-    messagesDiv.appendChild(msgDiv);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-</script>
+    // Sohbet kullanıcı seçimi
+    function selectChatUser(user) {
+      currentChatUser = user;
+      chatHeader.textContent = `Sohbet: ${user}`;
 
+      // Aktif kullanıcı işareti
+      Array.from(usersContainer.children).forEach(child => {
+        child.classList.toggle("active", child.textContent === user);
+      });
+
+      messages.innerHTML = "";
+      listenMessages();
+    }
+
+    // Mesajları dinle
+    function listenMessages() {
+      // Öncelikle var olan eski dinleyiciyi temizle (basit haliyle sayfayı yenilemek yeter)
+      messages.innerHTML = "";
+
+      const chatId = getChatId(currentUser, currentChatUser);
+      const chatRef = ref(db, 'messages/' + chatId);
+
+      // Mesajları sırayla dinle
+      onChildAdded(chatRef, (data) => {
+        const msg = data.val();
+        displayMessage(msg);
+      });
+    }
+
+    // Mesajı göster
+    function displayMessage(msg) {
+      const div = document.createElement("div");
+      div.classList.add("message");
+      div.classList.add(msg.sender === currentUser ? "sent" : "received");
+
+      const senderSpan = document.createElement("span");
+      senderSpan.classList.add("sender");
+      senderSpan.textContent = msg.sender;
+      div.appendChild(senderSpan);
+
+      const textNode = document.createTextNode(msg.text);
+      div.appendChild(textNode);
+
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Mesaj gönder
+    inputArea.onsubmit = (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if(text.length < 1 || !currentChatUser) return;
+
+      const chatId = getChatId(currentUser, currentChatUser);
+      const chatRef = ref(db, 'messages/' + chatId);
+      push(chatRef, {
+        sender: currentUser,
+        text: text,
+        timestamp: Date.now()
+      });
+
+      messageInput.value = "";
+      sendBtn.disabled = true;
+    };
+
+    // Gönder butonu aktifliği
+    messageInput.oninput = () => {
+      sendBtn.disabled = messageInput.value.trim().length === 0;
+    };
+
+    // İki kullanıcı adına göre chat ID oluştur
+    function getChatId(user1, user2) {
+      return [user1, user2].sort().join("_");
+    }
+  </script>
 </body>
 </html>
