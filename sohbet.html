@@ -1,175 +1,364 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Sohbet Uygulaması</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
-    #app { max-width: 800px; margin: auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    #login-section, #chat-section { display: none; }
-    #chat-window { display: flex; height: 400px; }
-    #user-list { width: 30%; border-right: 1px solid #ccc; padding: 10px; overflow-y: auto; }
-    #chat-area { width: 70%; padding: 10px; display: flex; flex-direction: column; }
-    #messages { flex-grow: 1; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: #f9f9f9; }
-    input, button { padding: 10px; margin: 5px 0; width: 100%; }
-    .user { cursor: pointer; margin-bottom: 5px; }
-    .user.active { font-weight: bold; }
-    .message { margin-bottom: 8px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Basit Sohbet Uygulaması</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Arial, sans-serif;
+    background: #f4f7f9;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+  #login, #chat {
+    margin: auto; background: white; padding: 20px;
+    border-radius: 8px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+    width: 100%; max-width: 420px;
+  }
+  #login { display: block; }
+  #chat { display: none; height: 90vh; display: flex; flex-direction: column; }
+
+  h2 { text-align: center; margin-top: 0; }
+
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input[type=text], input[type=password] {
+    width: 100%; padding: 8px; margin-top: 5px;
+    border: 1px solid #ccc; border-radius: 4px;
+  }
+  button {
+    margin-top: 15px; width: 100%;
+    padding: 10px; font-size: 16px;
+    border:none; background: #1976d2; color: white; border-radius: 4px;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+
+  #activeUsers {
+    margin-top: 15px;
+    background: #e3f2fd;
+    padding: 10px;
+    border-radius: 6px;
+    height: 80px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  #activeUsers span {
+    display: inline-block;
+    background: #2196f3;
+    color: white;
+    padding: 6px 10px;
+    margin-right: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  #activeUsers span.self {
+    background: #4caf50;
+  }
+
+  #messages {
+    flex: 1;
+    margin-top: 15px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 15px;
+    overflow-y: auto;
+  }
+  .msg {
+    margin-bottom: 12px;
+    max-width: 75%;
+    padding: 10px;
+    border-radius: 10px;
+    clear: both;
+  }
+  .msg.me {
+    background: #1976d2;
+    color: white;
+    float: right;
+    border-bottom-right-radius: 0;
+  }
+  .msg.other {
+    background: #e3f2fd;
+    color: #000;
+    float: left;
+    border-bottom-left-radius: 0;
+  }
+  #messageInputContainer {
+    display: flex;
+    margin-top: 10px;
+  }
+  #messageInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px 0 0 6px;
+    border: 1px solid #ccc;
+    border-right: none;
+  }
+  #sendBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border:none;
+    background: #1976d2;
+    color: white;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+  }
+  #sendBtn:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+
+  #logoutBtn {
+    margin-top: 15px;
+    background: #f44336;
+  }
+
+</style>
 </head>
 <body>
-  <div id="app">
-    <div id="login-section">
-      <h2>Giriş Yap / Kayıt Ol</h2>
-      <input type="text" id="username" placeholder="Kullanıcı Adı">
-      <input type="password" id="password" placeholder="Şifre">
-      <button id="login-btn">Giriş Yap</button>
-      <button id="register-btn">Kayıt Ol</button>
-      <p id="login-error" style="color:red;"></p>
-    </div>
 
-    <div id="chat-section">
-      <h2>Sohbet</h2>
-      <div id="chat-window">
-        <div id="user-list"><strong>Aktif Kullanıcılar</strong></div>
-        <div id="chat-area">
-          <div id="messages"></div>
-          <input type="text" id="message-input" placeholder="Mesajınızı yazın...">
-          <button id="send-btn">Gönder</button>
-        </div>
-      </div>
-    </div>
+  <div id="login">
+    <h2>Giriş / Kayıt Ol</h2>
+    <label for="usernameInput">Kullanıcı Adı</label>
+    <input type="text" id="usernameInput" placeholder="Kullanıcı adınızı girin" maxlength="20" autocomplete="off" />
+    
+    <label for="passwordInput">Şifre</label>
+    <input type="password" id="passwordInput" placeholder="Şifrenizi girin" maxlength="20" autocomplete="off" />
+    
+    <button id="loginBtn" disabled>Giriş Yap / Kayıt Ol</button>
+    <p style="margin-top:10px; font-size: 0.9em; color:#555;">
+      * Eğer kullanıcı yoksa kayıt olunur, varsa giriş yapılır.
+    </p>
+    <div id="loginError" style="color: red; margin-top: 10px; display:none;"></div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  <div id="chat">
+    <h2>Hoşgeldin, <span id="userDisplay"></span></h2>
+    <div><strong>Aktif Kullanıcılar:</strong></div>
+    <div id="activeUsers"></div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
-      authDomain: "sohbet-31244.firebaseapp.com",
-      databaseURL: "https://sohbet-31244-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "sohbet-31244",
-      storageBucket: "sohbet-31244.firebasestorage.app",
-      messagingSenderId: "22460967347",
-      appId: "1:22460967347:web:7fce6b4d75fd78bbac83c6",
-      measurementId: "G-RDTHWG6FCR"
-    };
+    <div id="messages"></div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    <div id="messageInputContainer">
+      <input type="text" id="messageInput" placeholder="Mesaj yaz..." autocomplete="off" />
+      <button id="sendBtn" disabled>Gönder</button>
+    </div>
 
-    let currentUser = null;
-    let selectedUser = null;
+    <button id="logoutBtn">Çıkış Yap</button>
+  </div>
 
-    const loginSection = document.getElementById('login-section');
-    const chatSection = document.getElementById('chat-section');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-    const messagesDiv = document.getElementById('messages');
-    const userListDiv = document.getElementById('user-list');
-    const loginError = document.getElementById('login-error');
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getDatabase, ref, set, get, child, onValue, update, push, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-    // Giriş / kayıt kontrol
-    loginSection.style.display = 'block';
+  // Firebase config (senin verdiğin)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
+    authDomain: "sohbet-31244.firebaseapp.com",
+    databaseURL: "https://sohbet-31244-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "sohbet-31244",
+    storageBucket: "sohbet-31244.firebasestorage.app",
+    messagingSenderId: "22460967347",
+    appId: "1:22460967347:web:7fce6b4d75fd78bbac83c6",
+    measurementId: "G-RDTHWG6FCR"
+  };
 
-    registerBtn.onclick = () => {
-      const uname = usernameInput.value.trim();
-      const pass = passwordInput.value;
-      if (!uname || !pass) return alert("Lütfen kullanıcı adı ve şifre girin.");
-      const userRef = ref(db, 'users/' + uname);
-      set(userRef, { password: pass, active: true });
-      currentUser = uname;
-      showChat();
-    };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    loginBtn.onclick = () => {
-      const uname = usernameInput.value.trim();
-      const pass = passwordInput.value;
-      if (!uname || !pass) return alert("Lütfen kullanıcı adı ve şifre girin.");
+  // DOM Elemanları
+  const loginDiv = document.getElementById('login');
+  const chatDiv = document.getElementById('chat');
+  const usernameInput = document.getElementById('usernameInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const userDisplay = document.getElementById('userDisplay');
+  const activeUsersDiv = document.getElementById('activeUsers');
+  const messagesDiv = document.getElementById('messages');
+  const messageInput = document.getElementById('messageInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-      const userRef = ref(db, 'users/' + uname);
-      onValue(userRef, snapshot => {
-        const userData = snapshot.val();
-        if (!userData) {
-          loginError.textContent = "Kullanıcı bulunamadı.";
-        } else if (userData.password === pass) {
-          update(userRef, { active: true });
-          currentUser = uname;
-          showChat();
-        } else {
-          loginError.textContent = "Şifre yanlış.";
-        }
-      }, { onlyOnce: true });
-    };
+  let currentUser = null;
+  let currentChatUser = null;
+  let messagesRef = null;
 
-    function showChat() {
-      loginSection.style.display = 'none';
-      chatSection.style.display = 'block';
-      loadUsers();
-      listenMessages();
-    }
+  // Kullanıcı adı ve şifre girildiğinde buton aktifleşsin
+  function updateLoginBtn() {
+    loginBtn.disabled = !(usernameInput.value.trim() && passwordInput.value.trim());
+  }
+  usernameInput.addEventListener('input', updateLoginBtn);
+  passwordInput.addEventListener('input', updateLoginBtn);
 
-    function loadUsers() {
+  // Giriş / Kayıt işlemi
+  loginBtn.addEventListener('click', async () => {
+    loginError.style.display = 'none';
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if(!username || !password) return;
+
+    try {
+      // Kullanıcılar veritabanı referansı
       const usersRef = ref(db, 'users');
-      onValue(usersRef, snapshot => {
-        userListDiv.innerHTML = "<strong>Aktif Kullanıcılar</strong>";
-        const users = snapshot.val();
-        for (let uname in users) {
-          if (users[uname].active && uname !== currentUser) {
-            const div = document.createElement('div');
-            div.textContent = uname;
-            div.className = 'user';
-            if (uname === selectedUser) div.classList.add('active');
-            div.onclick = () => {
-              selectedUser = uname;
-              document.querySelectorAll('.user').forEach(e => e.classList.remove('active'));
-              div.classList.add('active');
-              listenMessages();
-            };
-            userListDiv.appendChild(div);
-          }
-        }
-      });
-    }
+      const userSnapshot = await get(child(usersRef, username));
 
-    function listenMessages() {
-      if (!selectedUser) return;
-      const chatId = [currentUser, selectedUser].sort().join('_');
-      const chatRef = ref(db, 'chats/' + chatId);
-      onValue(chatRef, snapshot => {
-        const data = snapshot.val();
-        messagesDiv.innerHTML = '';
-        for (let key in data) {
-          const msg = data[key];
-          const div = document.createElement('div');
-          div.className = 'message';
-          div.innerHTML = `<strong>${msg.from}:</strong> ${msg.text}`;
-          messagesDiv.appendChild(div);
+      if(userSnapshot.exists()) {
+        // Kullanıcı var, şifre kontrol et
+        const userData = userSnapshot.val();
+        if(userData.password !== password) {
+          loginError.textContent = 'Hatalı şifre.';
+          loginError.style.display = 'block';
+          return;
         }
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      });
-    }
+        // Giriş başarılı
+        currentUser = username;
+      } else {
+        // Yeni kullanıcı, kayıt ol
+        await set(child(usersRef, username), {
+          password,
+          active: true,
+          lastSeen: Date.now()
+        });
+        currentUser = username;
+      }
 
-    sendBtn.onclick = () => {
-      const msg = messageInput.value.trim();
-      if (!msg || !selectedUser) return;
-      const chatId = [currentUser, selectedUser].sort().join('_');
-      const chatRef = ref(db, 'chats/' + chatId);
-      push(chatRef, { from: currentUser, text: msg });
+      // Kullanıcı aktif yap
+      await update(ref(db, 'users/' + currentUser), {
+        active: true,
+        lastSeen: Date.now()
+      });
+
+      // Gösterim ayarları
+      userDisplay.textContent = currentUser;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'flex';
+
+      // Aktif kullanıcıları göster ve dinle
+      listenActiveUsers();
+
+      // Mesajları göster
+      setupMessages();
+
+      // Butonları aktif et
+      sendBtn.disabled = true;
       messageInput.value = '';
-    };
+      messageInput.focus();
 
-    window.addEventListener('beforeunload', () => {
-      if (currentUser) {
-        const userRef = ref(db, 'users/' + currentUser);
-        update(userRef, { active: false });
+    } catch (e) {
+      loginError.textContent = 'Bir hata oluştu: ' + e.message;
+      loginError.style.display = 'block';
+    }
+  });
+
+  // Aktif kullanıcılar listesini dinle
+  function listenActiveUsers() {
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, (snapshot) => {
+      activeUsersDiv.innerHTML = '';
+      const users = snapshot.val() || {};
+      for(let user in users) {
+        if(users[user].active) {
+          const span = document.createElement('span');
+          span.textContent = user;
+          span.classList.toggle('self', user === currentUser);
+          span.onclick = () => {
+            if(user === currentUser) {
+              alert("Kendinizle sohbet edemezsiniz.");
+              return;
+            }
+            currentChatUser = user;
+            loadChatMessages(currentUser, currentChatUser);
+          };
+          activeUsersDiv.appendChild(span);
+        }
       }
     });
-  </script>
+  }
+
+  // Mesajları ayarla
+  function setupMessages() {
+    messagesDiv.innerHTML = '<em>Bir kullanıcı seçerek sohbet başlatabilirsiniz.</em>';
+  }
+
+  // Chat mesajlarını yükle
+  function loadChatMessages(user1, user2) {
+    if(messagesRef) off(messagesRef);
+    messagesDiv.innerHTML = '';
+    sendBtn.disabled = false;
+    messageInput.disabled = false;
+    messageInput.value = '';
+    messageInput.focus();
+
+    // Mesajları kullanıcı ikilisi için alacağız, küçükten büyüğe sırala
+    const chatId = user1 < user2 ? user1 + '_' + user2 : user2 + '_' + user1;
+    messagesRef = ref(db, 'messages/' + chatId);
+
+    onValue(messagesRef, (snapshot) => {
+      messagesDiv.innerHTML = '';
+      const msgs = snapshot.val() || {};
+      Object.entries(msgs).forEach(([key, msg]) => {
+        const div = document.createElement('div');
+        div.classList.add('msg');
+        div.classList.add(msg.sender === currentUser ? 'me' : 'other');
+        div.textContent = msg.text;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  }
+
+  // Mesaj gönderme
+  sendBtn.addEventListener('click', async () => {
+    const text = messageInput.value.trim();
+    if(!text || !currentChatUser) return;
+
+    const chatId = currentUser < currentChatUser ? currentUser + '_' + currentChatUser : currentChatUser + '_' + currentUser;
+    const msgRef = push(ref(db, 'messages/' + chatId));
+    await set(msgRef, {
+      sender: currentUser,
+      text,
+      timestamp: Date.now()
+    });
+    messageInput.value = '';
+    messageInput.focus();
+  });
+
+  // Enter ile mesaj gönderme
+  messageInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !sendBtn.disabled) {
+      sendBtn.click();
+    }
+  });
+
+  // Çıkış yap
+  logoutBtn.addEventListener('click', async () => {
+    if(!currentUser) return;
+    await update(ref(db, 'users/' + currentUser), {
+      active: false,
+      lastSeen: Date.now()
+    });
+    currentUser = null;
+    currentChatUser = null;
+    messagesRef = null;
+    chatDiv.style.display = 'none';
+    loginDiv.style.display = 'block';
+    usernameInput.value = '';
+    passwordInput.value = '';
+    loginBtn.disabled = true;
+    loginError.style.display = 'none';
+    activeUsersDiv.innerHTML = '';
+    messagesDiv.innerHTML = '';
+  });
+
+</script>
+
 </body>
 </html>
