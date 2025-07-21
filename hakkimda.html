@@ -74,14 +74,14 @@
           >Ana Sayfa</a
         >
         <a
-          href="blog.html"
-          class="nav-link text-gray-700 hover:text-blue-600 transition duration-300"
-          >Blog</a
-        >
-        <a
           href="hakkimda.html"
           class="nav-link text-blue-600 font-medium"
           >Hakkımda</a
+        >
+        <a
+          href="blog.html"
+          class="nav-link text-gray-700 hover:text-blue-600 transition duration-300"
+          >Blog</a
         >
         <a
           href="iletisim.html"
@@ -102,14 +102,14 @@
         >Ana Sayfa</a
       >
       <a
-        href="blog.html"
-        class="block py-2 text-gray-700 hover:text-blue-600"
-        >Blog</a
-      >
-      <a
         href="hakkimda.html"
         class="block py-2 text-blue-600 font-medium"
         >Hakkımda</a
+      >
+      <a
+        href="blog.html"
+        class="block py-2 text-gray-700 hover:text-blue-600"
+        >Blog</a
       >
       <a
         href="iletisim.html"
@@ -348,44 +348,4 @@
       menu.classList.toggle("hidden");
     });
 
-    // Typing effect for "Web geliştirici", "Teknoloji meraklısı" gibi metinler
-    const typingText = document.getElementById("typing-text");
-    const phrases = [
-      "Web geliştirici",
-      "Teknoloji meraklısı",
-      "Yazılım tutkunu",
-      "Muhammetltz"
-    ];
-    let currentPhrase = 0;
-    let currentChar = 0;
-    let isDeleting = false;
-    let typingSpeed = 100;
-
-    function type() {
-      const phrase = phrases[currentPhrase];
-      if (isDeleting) {
-        currentChar--;
-        typingText.textContent = phrase.substring(0, currentChar);
-      } else {
-        currentChar++;
-        typingText.textContent = phrase.substring(0, currentChar);
-      }
-
-      if (!isDeleting && currentChar === phrase.length) {
-        setTimeout(() => {
-          isDeleting = true;
-          type();
-        }, 1500);
-        return;
-      } else if (isDeleting && currentChar === 0) {
-        isDeleting = false;
-        currentPhrase = (currentPhrase + 1) % phrases.length;
-      }
-
-      setTimeout(type, isDeleting ? typingSpeed / 2 : typingSpeed);
-    }
-
-    type();
-  </script>
-</body>
-</html>
+    // Typ
