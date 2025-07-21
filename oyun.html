@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Kutu ile engelden kaç!</title>
 <style>
-  /* Temel ve responsive ayarlar */
   body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -43,24 +42,22 @@
   }
   #container {
     width: 650px;
-    max-width: 95vw;
     background: white;
     border: 2px solid #333;
     border-radius: 8px;
     padding: 20px;
-    margin-top: 70px;
-    box-sizing: border-box;
+    margin-top: 50px;
   }
   #game {
     position: relative;
-    width: 100%;
-    max-width: 600px;
+    width: 600px;
     height: 150px;
     background-color: #fff;
     border: 2px solid #333;
     overflow: hidden;
     margin-bottom: 15px;
-    user-select: none;
+    -webkit-tap-highlight-color: transparent; /* mobil mavi vurgu kapatma */
+    touch-action: manipulation; /* dokunma optimize */
   }
   #dino {
     position: absolute;
@@ -94,7 +91,6 @@
     font-weight: bold;
     font-size: 18px;
     color: #333;
-    user-select: none;
   }
   #gameOver {
     position: absolute;
@@ -106,38 +102,28 @@
     color: #d33;
     display: none;
     cursor: pointer;
-    user-select: none;
+    pointer-events: none; /* Başta tıklanmasın */
+  }
+  #gameOver.active {
+    pointer-events: auto; /* Görünürken tıklanabilir */
   }
   #userNameSection {
     margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
   }
   #userNameSection label {
     font-weight: bold;
-    flex: 0 0 auto;
   }
   #userNameInput {
     padding: 6px 8px;
     font-size: 16px;
     margin-left: 10px;
     width: 220px;
-    max-width: 60vw;
-    box-sizing: border-box;
-    flex: 1 1 auto;
   }
   #startBtn {
     padding: 8px 16px;
     font-size: 16px;
     margin-left: 10px;
     cursor: pointer;
-    flex: 0 0 auto;
-    user-select: none;
-  }
-  #startBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
   #leaderboard {
     margin-top: 20px;
@@ -149,8 +135,6 @@
   #leaderboardList {
     list-style: none;
     padding-left: 0;
-    max-height: 250px;
-    overflow-y: auto;
   }
   #leaderboardList li {
     background: #eee;
@@ -160,77 +144,36 @@
     font-weight: 600;
     display: flex;
     justify-content: space-between;
-    user-select: none;
-  }
-
-  /* Mobil uyumlu için */
-  @media (max-width: 700px) {
-    #container {
-      width: 95vw;
-      padding: 15px;
-    }
-    #game {
-      height: 120px;
-    }
-    #dino {
-      width: 30px;
-      height: 30px;
-      left: 30px;
-    }
-    .obstacle {
-      width: 15px;
-      height: 30px;
-    }
-    #userNameInput {
-      width: 150px;
-      margin-left: 5px;
-      font-size: 14px;
-      padding: 5px 6px;
-    }
-    #startBtn {
-      margin-left: 5px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
-    #score {
-      font-size: 16px;
-      top: 3px;
-      left: 5px;
-    }
-    #gameOver {
-      font-size: 22px;
-      top: 35%;
-    }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">MGL</div>
-  <a href="index.html">Ana Sayfa</a>
-</nav>
+  <nav>
+    <div class="logo">MGL</div>
+    <a href="index.html">Ana Sayfa</a>
+  </nav>
 
-<div id="container">
+  <div id="container">
 
-  <div id="userNameSection">
-    <label for="userNameInput">Kullanıcı Adı:</label>
-    <input type="text" id="userNameInput" placeholder="Adınızı girin" maxlength="15" />
-    <button id="startBtn" disabled>Oyunu Başlat</button>
+    <div id="userNameSection">
+      <label for="userNameInput">Kullanıcı Adı:</label>
+      <input type="text" id="userNameInput" placeholder="Adınızı girin" maxlength="15" />
+      <button id="startBtn" disabled>Oyunu Başlat</button>
+    </div>
+
+    <div id="game">
+      <div id="score">Skor: 0</div>
+      <div id="dino"></div>
+      <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
+    </div>
+
+    <div id="leaderboard">
+      <h2>🏆 Liderlik Tablosu</h2>
+      <ul id="leaderboardList"></ul>
+    </div>
+
   </div>
-
-  <div id="game">
-    <div id="score">Skor: 0</div>
-    <div id="dino"></div>
-    <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
-  </div>
-
-  <div id="leaderboard">
-    <h2>🏆 Liderlik Tablosu</h2>
-    <ul id="leaderboardList"></ul>
-  </div>
-
-</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -249,9 +192,7 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-  const scoresRef = ref(db, 'scores');
 
-  // DOM elemanları
   const userNameInput = document.getElementById('userNameInput');
   const startBtn = document.getElementById('startBtn');
   const game = document.getElementById('game');
@@ -260,11 +201,10 @@
   const gameOverText = document.getElementById('gameOver');
   const leaderboardList = document.getElementById('leaderboardList');
 
-  // Oyun değişkenleri
   let gameRunning = false;
   let score = 0;
   let obstacle = null;
-  const gameWidth = game.clientWidth;
+  const gameWidth = 600;
   const minSpeed = 6;
   const maxSpeed = 15;
   const speedIncrement = 0.4;
@@ -272,12 +212,10 @@
   let gameSpeed;
   let userName = '';
 
-  // Kullanıcı adı giriş kontrolü
   userNameInput.addEventListener('input', () => {
     startBtn.disabled = userNameInput.value.trim() === '';
   });
 
-  // Dino zıplama fonksiyonu
   function jump() {
     if (dino.classList.contains('jump')) return;
     dino.classList.add('jump');
@@ -286,7 +224,6 @@
     }, 500);
   }
 
-  // Engel yaratma ve hareket ettirme
   function createObstacle() {
     if (!gameRunning) return;
 
@@ -299,7 +236,7 @@
     obstacle.classList.add('obstacle');
     game.appendChild(obstacle);
 
-    obstacleLeft = game.clientWidth;
+    obstacleLeft = gameWidth;
     obstacle.style.left = obstacleLeft + 'px';
 
     gameSpeed = Math.min(minSpeed + speedIncrement * score, maxSpeed);
@@ -316,20 +253,18 @@
       obstacleLeft -= gameSpeed;
       obstacle.style.left = obstacleLeft + 'px';
 
-      // Çarpışma kontrolü (kutu ve dino)
       const dinoRect = dino.getBoundingClientRect();
       const obsRect = obstacle.getBoundingClientRect();
 
       if (
-        dinoRect.right > obsRect.left + 5 && // tolerans eklendi
+        dinoRect.right > obsRect.left + 5 &&
         dinoRect.left < obsRect.right - 5 &&
-        dinoRect.bottom > obsRect.top + 10 // zıplama toleransı
+        dinoRect.bottom > obsRect.top + 10
       ) {
         endGame();
         return;
       }
 
-      // Engel ekran dışına çıkınca
       if (obstacleLeft < -20) {
         obstacle.remove();
         obstacle = null;
@@ -347,10 +282,10 @@
     moveObstacle();
   }
 
-  // Oyunu bitirme fonksiyonu
   function endGame() {
     gameRunning = false;
     gameOverText.style.display = 'block';
+    gameOverText.classList.add('active');
     if (obstacle) {
       obstacle.remove();
       obstacle = null;
@@ -359,7 +294,6 @@
     updateLeaderboard();
   }
 
-  // Oyunu başlatma fonksiyonu
   function startGame() {
     if (userNameInput.value.trim() === '') {
       alert('Lütfen önce kullanıcı adınızı girin!');
@@ -369,6 +303,7 @@
     score = 0;
     scoreDisplay.textContent = 'Skor: 0';
     gameOverText.style.display = 'none';
+    gameOverText.classList.remove('active');
     gameRunning = true;
     createObstacle();
   }
@@ -379,7 +314,7 @@
     }
   });
 
-  // Boşluk tuşu ile zıplama ve oyun yeniden başlatma
+  // Boşluk tuşuna basınca zıplama ve oyun bittiğinde yeniden başlama
   document.addEventListener('keydown', e => {
     if (e.code === 'Space') {
       if (gameRunning) {
@@ -390,41 +325,43 @@
     }
   });
 
-  gameOverText.addEventListener('click', () => {
+  // Mobil dokunma için
+  document.addEventListener('touchstart', e => {
     if (!gameRunning) {
       startGame();
+    } else {
+      jump();
     }
   });
 
-  // Firebase'den skorları çek ve listeyi güncelle
+  // Firebase'den skorları çek ve güncelle
   function updateLeaderboard() {
-    const q = query(scoresRef, orderByChild('score'), limitToLast(10));
-    onValue(q, snap => {
-      let arr = [];
-      snap.forEach(childSnap => {
-        arr.push(childSnap.val());
+    const scoresRef = query(ref(db, 'scores'), orderByChild('score'), limitToLast(10));
+    onValue(scoresRef, (snapshot) => {
+      const scores = [];
+      snapshot.forEach(childSnapshot => {
+        scores.push(childSnapshot.val());
       });
-      // Skorları büyükten küçüğe sırala
-      arr.sort((a, b) => b.score - a.score);
+      scores.sort((a, b) => b.score - a.score);
       leaderboardList.innerHTML = '';
-      arr.forEach(e => {
+      scores.forEach(entry => {
         const li = document.createElement('li');
-        li.textContent = e.name;
+        li.textContent = entry.name;
         const span = document.createElement('span');
-        span.textContent = e.score;
+        span.textContent = entry.score;
         li.appendChild(span);
         leaderboardList.appendChild(li);
       });
     });
   }
 
-  // Firebase'e skor kaydet
+  // Skoru Firebase'e kaydet
   function saveScore(name, newScore) {
     if (newScore === 0) return;
+    const scoresRef = ref(db, 'scores');
     push(scoresRef, { name, score: newScore });
   }
 
-  // Sayfa açılır açılmaz liderlik tablosunu güncelle
   updateLeaderboard();
 </script>
 
