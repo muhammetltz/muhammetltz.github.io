@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firebase Sohbet</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background:#fafafa; }
+  #chat { max-width: 600px; margin: auto; }
+  #messages { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; background: white; }
+  #messages div { margin-bottom: 8px; }
+  #messages div span { font-weight: bold; margin-right: 5px; }
+  #inputArea { margin-top: 10px; display: flex; }
+  #userName, #messageInput { padding: 8px; font-size: 16px; }
+  #userName { width: 150px; margin-right: 10px; }
+  #messageInput { flex: 1; }
+  #sendBtn { padding: 8px 15px; margin-left: 10px; font-size: 16px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div id="chat">
+  <div>
+    <input id="userName" placeholder="Adınız" maxlength="20" />
+  </div>
+  <div id="messages"></div>
+  <div id="inputArea">
+    <input id="messageInput" placeholder="Mesajınızı yazın..." maxlength="200" />
+    <button id="sendBtn" disabled>Gönder</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+  // Firebase yapılandırman (senin verdiğin)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
+    authDomain: "sohbet-31244.firebaseapp.com",
+    databaseURL: "https://sohbet-31244-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "sohbet-31244",
+    storageBucket: "sohbet-31244.appspot.com",
+    messagingSenderId: "22460967347",
+    appId: "1:22460967347:web:7fce6b4d75fd78bbac83c6",
+    measurementId: "G-RDTHWG6FCR"
+  };
+
+  // Firebase başlat
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const userNameInput = document.getElementById('userName');
+  const messageInput = document.getElementById('messageInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const messagesDiv = document.getElementById('messages');
+
+  // Mesaj ve isim temizleme
+  function sanitize(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Gönder butonunu aktif/pasif yap
+  function toggleSendBtn() {
+    sendBtn.disabled = !(userNameInput.value.trim() && messageInput.value.trim());
+  }
+
+  userNameInput.addEventListener('input', toggleSendBtn);
+  messageInput.addEventListener('input', toggleSendBtn);
+
+  // Mesaj gönder
+  sendBtn.addEventListener('click', () => {
+    const name = userNameInput.value.trim();
+    const msg = messageInput.value.trim();
+    if (!name || !msg) return;
+
+    push(ref(db, 'messages'), {
+      name,
+      message: msg,
+      timestamp: Date.now()
+    }).then(() => {
+      messageInput.value = '';
+      toggleSendBtn();
+    });
+  });
+
+  // Yeni mesajları dinle ve göster
+  onChildAdded(ref(db, 'messages'), (data) => {
+    const { name, message } = data.val();
+    const msgDiv = document.createElement('div');
+    msgDiv.innerHTML = `<span>${sanitize(name)}:</span> ${sanitize(message)}`;
+    messagesDiv.appendChild(msgDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+</script>
+
+</body>
+</html>
