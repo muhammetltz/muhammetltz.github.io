@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Kutu ile engelden kaç!</title>
 <style>
   body {
@@ -42,22 +42,23 @@
   }
   #container {
     width: 650px;
+    max-width: 95vw;
     background: white;
     border: 2px solid #333;
     border-radius: 8px;
     padding: 20px;
     margin-top: 50px;
+    box-sizing: border-box;
   }
   #game {
     position: relative;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     height: 150px;
     background-color: #fff;
     border: 2px solid #333;
     overflow: hidden;
     margin-bottom: 15px;
-    -webkit-tap-highlight-color: transparent; /* mobil mavi vurgu kapatma */
-    touch-action: manipulation; /* dokunma optimize */
   }
   #dino {
     position: absolute;
@@ -67,6 +68,7 @@
     height: 40px;
     background-color: #555;
     border-radius: 5px;
+    touch-action: manipulation;
   }
   #dino.jump {
     animation: jump 500ms ease forwards;
@@ -102,28 +104,32 @@
     color: #d33;
     display: none;
     cursor: pointer;
-    pointer-events: none; /* Başta tıklanmasın */
-  }
-  #gameOver.active {
-    pointer-events: auto; /* Görünürken tıklanabilir */
+    user-select: none;
   }
   #userNameSection {
     margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
   }
   #userNameSection label {
     font-weight: bold;
+    margin-right: 10px;
+    flex-shrink: 0;
   }
   #userNameInput {
     padding: 6px 8px;
     font-size: 16px;
-    margin-left: 10px;
+    margin-right: 10px;
     width: 220px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   #startBtn {
     padding: 8px 16px;
     font-size: 16px;
-    margin-left: 10px;
     cursor: pointer;
+    user-select: none;
   }
   #leaderboard {
     margin-top: 20px;
@@ -135,6 +141,8 @@
   #leaderboardList {
     list-style: none;
     padding-left: 0;
+    max-height: 220px;
+    overflow-y: auto;
   }
   #leaderboardList li {
     background: #eee;
@@ -162,10 +170,10 @@
       <button id="startBtn" disabled>Oyunu Başlat</button>
     </div>
 
-    <div id="game">
+    <div id="game" tabindex="0" aria-label="Oyun alanı">
       <div id="score">Skor: 0</div>
       <div id="dino"></div>
-      <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
+      <div id="gameOver" role="alert" aria-live="assertive">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
     </div>
 
     <div id="leaderboard">
@@ -204,7 +212,7 @@
   let gameRunning = false;
   let score = 0;
   let obstacle = null;
-  const gameWidth = 600;
+  const gameWidth = game.clientWidth;
   const minSpeed = 6;
   const maxSpeed = 15;
   const speedIncrement = 0.4;
@@ -236,7 +244,7 @@
     obstacle.classList.add('obstacle');
     game.appendChild(obstacle);
 
-    obstacleLeft = gameWidth;
+    obstacleLeft = game.clientWidth;
     obstacle.style.left = obstacleLeft + 'px';
 
     gameSpeed = Math.min(minSpeed + speedIncrement * score, maxSpeed);
@@ -256,10 +264,11 @@
       const dinoRect = dino.getBoundingClientRect();
       const obsRect = obstacle.getBoundingClientRect();
 
+      // Çarpışma kontrolü
       if (
-        dinoRect.right > obsRect.left + 5 &&
+        dinoRect.right > obsRect.left + 5 && // küçük tolerans
         dinoRect.left < obsRect.right - 5 &&
-        dinoRect.bottom > obsRect.top + 10
+        dinoRect.bottom > obsRect.top + 10 // zıplama toleransı
       ) {
         endGame();
         return;
@@ -285,7 +294,6 @@
   function endGame() {
     gameRunning = false;
     gameOverText.style.display = 'block';
-    gameOverText.classList.add('active');
     if (obstacle) {
       obstacle.remove();
       obstacle = null;
@@ -294,55 +302,44 @@
     updateLeaderboard();
   }
 
-  function startGame() {
-    if (userNameInput.value.trim() === '') {
-      alert('Lütfen önce kullanıcı adınızı girin!');
-      return;
+  async function saveScore(name, newScore) {
+    if (newScore === 0) return;
+
+    const scoresRef = ref(db, 'scores');
+
+    const snapshot = await new Promise((resolve) => {
+      onValue(scoresRef, resolve, { onlyOnce: true });
+    });
+
+    let maxUserScore = 0;
+    snapshot.forEach(childSnap => {
+      const val = childSnap.val();
+      if (val.name === name && val.score > maxUserScore) {
+        maxUserScore = val.score;
+      }
+    });
+
+    if (newScore > maxUserScore) {
+      push(scoresRef, { name, score: newScore });
     }
-    userName = userNameInput.value.trim();
-    score = 0;
-    scoreDisplay.textContent = 'Skor: 0';
-    gameOverText.style.display = 'none';
-    gameOverText.classList.remove('active');
-    gameRunning = true;
-    createObstacle();
   }
 
-  startBtn.addEventListener('click', () => {
-    if (!gameRunning) {
-      startGame();
-    }
-  });
-
-  // Boşluk tuşuna basınca zıplama ve oyun bittiğinde yeniden başlama
-  document.addEventListener('keydown', e => {
-    if (e.code === 'Space') {
-      if (gameRunning) {
-        jump();
-      } else {
-        startGame();
-      }
-    }
-  });
-
-  // Mobil dokunma için
-  document.addEventListener('touchstart', e => {
-    if (!gameRunning) {
-      startGame();
-    } else {
-      jump();
-    }
-  });
-
-  // Firebase'den skorları çek ve güncelle
   function updateLeaderboard() {
-    const scoresRef = query(ref(db, 'scores'), orderByChild('score'), limitToLast(10));
+    const scoresRef = query(ref(db, 'scores'), orderByChild('score'));
     onValue(scoresRef, (snapshot) => {
-      const scores = [];
+      const scoresMap = new Map();
       snapshot.forEach(childSnapshot => {
-        scores.push(childSnapshot.val());
+        const entry = childSnapshot.val();
+        if (!scoresMap.has(entry.name) || scoresMap.get(entry.name) < entry.score) {
+          scoresMap.set(entry.name, entry.score);
+        }
       });
-      scores.sort((a, b) => b.score - a.score);
+
+      const scores = Array.from(scoresMap.entries())
+        .map(([name, score]) => ({ name, score }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+
       leaderboardList.innerHTML = '';
       scores.forEach(entry => {
         const li = document.createElement('li');
@@ -355,12 +352,56 @@
     });
   }
 
-  // Skoru Firebase'e kaydet
-  function saveScore(name, newScore) {
-    if (newScore === 0) return;
-    const scoresRef = ref(db, 'scores');
-    push(scoresRef, { name, score: newScore });
+  function startGame() {
+    if (userNameInput.value.trim() === '') {
+      alert('Lütfen önce kullanıcı adınızı girin!');
+      return;
+    }
+    userName = userNameInput.value.trim();
+    score = 0;
+    scoreDisplay.textContent = 'Skor: 0';
+    gameOverText.style.display = 'none';
+    gameRunning = true;
+    createObstacle();
   }
+
+  startBtn.addEventListener('click', () => {
+    if (!gameRunning) {
+      startGame();
+      game.focus();
+    }
+  });
+
+  // Boşluk tuşuna basınca zıplama ve oyun bittiğinde yeniden başlama
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (gameRunning) {
+        jump();
+      } else {
+        startGame();
+        game.focus();
+      }
+    }
+  });
+
+  // Mobilde dokunmatik zıplama için oyun alanına dokunulduğunda zıplat
+  game.addEventListener('touchstart', e => {
+    e.preventDefault();
+    if (gameRunning) {
+      jump();
+    } else {
+      startGame();
+    }
+  }, { passive: false });
+
+  // Oyun bitti yazısına tıklayınca yeniden başlat
+  gameOverText.addEventListener('click', () => {
+    if (!gameRunning) {
+      startGame();
+      game.focus();
+    }
+  });
 
   updateLeaderboard();
 </script>
