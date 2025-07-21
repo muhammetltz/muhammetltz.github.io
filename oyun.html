@@ -5,23 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Kutu ile engelden kaç!</title>
 <style>
-  /* Temel tam ekran ve responsive ayarlar */
+  /* Genel stil */
   html, body {
-    margin: 0; 
-    padding: 0; 
-    height: 100%;
-    width: 100%;
-    background-color: #f0f0f0;
+    margin: 0; padding: 0; height: 100%;
     font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     overflow-x: hidden;
   }
   body {
-    display: flex;
-    justify-content: center;
+    display: flex; 
+    justify-content: center; 
     align-items: flex-start;
-    padding-top: 60px; /* Navbar yüksekliği kadar boşluk */
-    box-sizing: border-box;
     min-height: 100vh;
+    padding: 70px 20px 20px 20px; /* nav yüksekliği boşluk */
+    box-sizing: border-box;
   }
   nav {
     position: fixed;
@@ -29,7 +26,7 @@
     background: linear-gradient(90deg, #004e92, #000428);
     padding: 10px 20px;
     box-sizing: border-box;
-    z-index: 1000;
+    z-index: 10000;
     display: flex; justify-content: space-between; align-items: center;
   }
   nav .logo {
@@ -48,67 +45,24 @@
   nav a:hover {
     text-decoration: underline;
   }
-
   #container {
-    width: 100vw;
-    max-width: 650px;
-    padding: 20px;
+    width: 650px;
+    max-width: 100vw;
     background: white;
     border: 2px solid #333;
     border-radius: 8px;
+    padding: 20px;
     box-sizing: border-box;
-    height: calc(100vh - 60px - 40px); /* navbar ve padding düşüldü */
-    display: flex;
-    flex-direction: column;
   }
-
-  #userNameSection {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  #userNameSection label {
-    font-weight: bold;
-    flex: 0 0 auto;
-  }
-  #userNameInput {
-    padding: 6px 8px;
-    font-size: 16px;
-    margin-left: 10px;
-    width: 180px;
-    flex: 1 1 auto;
-    min-width: 140px;
-  }
-  #startBtn {
-    padding: 8px 16px;
-    font-size: 16px;
-    margin-left: 10px;
-    cursor: pointer;
-    flex: 0 0 auto;
-    min-width: 110px;
-  }
-
   #game {
     position: relative;
     width: 100%;
-    height: 250px;
+    max-width: 600px;
+    height: 150px;
     background-color: #fff;
     border: 2px solid #333;
     overflow: hidden;
     margin-bottom: 15px;
-    border-radius: 6px;
-  }
-
-  #score {
-    position: absolute;
-    top: 8px;
-    left: 12px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #333;
-    z-index: 10;
-    user-select: none;
   }
   #dino {
     position: absolute;
@@ -118,7 +72,6 @@
     height: 40px;
     background-color: #555;
     border-radius: 5px;
-    user-select: none;
   }
   #dino.jump {
     animation: jump 500ms ease forwards;
@@ -135,9 +88,15 @@
     height: 40px;
     background-color: #d33;
     border-radius: 3px;
-    user-select: none;
   }
-
+  #score {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+  }
   #gameOver {
     position: absolute;
     top: 40%;
@@ -148,14 +107,37 @@
     color: #d33;
     display: none;
     cursor: pointer;
-    user-select: none;
-    z-index: 20;
   }
-
+  #userNameSection {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  #userNameSection label {
+    font-weight: bold;
+    flex: 0 0 auto;
+  }
+  #userNameInput {
+    padding: 6px 8px;
+    font-size: 16px;
+    margin-left: 10px;
+    flex: 1 1 auto;
+    min-width: 150px;
+    max-width: 220px;
+    box-sizing: border-box;
+  }
+  #startBtn {
+    padding: 8px 16px;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
   #leaderboard {
-    margin-top: auto;
-    overflow-y: auto;
-    max-height: 200px;
+    margin-top: 20px;
+    max-width: 600px;
+    width: 100%;
   }
   #leaderboard h2 {
     margin-bottom: 10px;
@@ -164,7 +146,8 @@
   #leaderboardList {
     list-style: none;
     padding-left: 0;
-    margin: 0;
+    max-height: 250px;
+    overflow-y: auto;
   }
   #leaderboardList li {
     background: #eee;
@@ -174,24 +157,44 @@
     font-weight: 600;
     display: flex;
     justify-content: space-between;
-    user-select: none;
   }
 
-  /* Mobilde input ve buton genişliği tam */
-  @media (max-width: 480px) {
+  /* Mobil uyumluluk */
+  @media (max-width: 700px) {
+    #container {
+      width: 95vw;
+      padding: 15px;
+    }
+    #game {
+      height: 130px;
+    }
+    #dino {
+      width: 35px;
+      height: 35px;
+      left: 35px;
+    }
+    .obstacle {
+      width: 18px;
+      height: 35px;
+    }
+    #score {
+      font-size: 16px;
+      top: 3px;
+      left: 8px;
+    }
+    #gameOver {
+      font-size: 24px;
+      top: 35%;
+    }
     #userNameInput {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 8px;
+      max-width: 100%;
+      margin-left: 5px;
+      margin-bottom: 8px;
+      flex: 1 1 100%;
     }
     #startBtn {
-      width: 100%;
+      flex: 1 1 100%;
       margin-left: 0;
-      margin-top: 8px;
-    }
-    #userNameSection {
-      flex-direction: column;
-      align-items: stretch;
     }
   }
 </style>
@@ -211,7 +214,7 @@
       <button id="startBtn" disabled>Oyunu Başlat</button>
     </div>
 
-    <div id="game" tabindex="0" aria-label="Oyun alanı">
+    <div id="game" tabindex="0">
       <div id="score">Skor: 0</div>
       <div id="dino"></div>
       <div id="gameOver" role="alert">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
@@ -226,7 +229,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB4Er3_V3d2eX_cT6vn4FfjTIIK5K28MpM",
@@ -261,10 +264,12 @@
   let gameSpeed;
   let userName = '';
 
+  // Kullanıcı adı girilince buton aktif olsun
   userNameInput.addEventListener('input', () => {
     startBtn.disabled = userNameInput.value.trim() === '';
   });
 
+  // Dino zıplama fonksiyonu
   function jump() {
     if (dino.classList.contains('jump')) return;
     dino.classList.add('jump');
@@ -273,6 +278,7 @@
     }, 500);
   }
 
+  // Engel oluştur ve hareket ettir
   function createObstacle() {
     if (!gameRunning) return;
 
@@ -305,15 +311,17 @@
       const dinoRect = dino.getBoundingClientRect();
       const obsRect = obstacle.getBoundingClientRect();
 
+      // Çarpışma kontrolü, ufak toleranslar var
       if (
-        dinoRect.right > obsRect.left + 5 && // küçük tolerans eklendi
+        dinoRect.right > obsRect.left + 5 &&
         dinoRect.left < obsRect.right - 5 &&
-        dinoRect.bottom > obsRect.top + 10 // Dino zıpladığında biraz daha tolerans
+        dinoRect.bottom > obsRect.top + 10
       ) {
         endGame();
         return;
       }
 
+      // Engel tamamen sola kayınca
       if (obstacleLeft < -20) {
         obstacle.remove();
         obstacle = null;
@@ -331,6 +339,7 @@
     moveObstacle();
   }
 
+  // Oyun bittiğinde çalışır
   function endGame() {
     gameRunning = false;
     gameOverText.style.display = 'block';
@@ -342,6 +351,7 @@
     updateLeaderboard();
   }
 
+  // Oyunu başlat
   function startGame() {
     if (userNameInput.value.trim() === '') {
       alert('Lütfen önce kullanıcı adınızı girin!');
@@ -358,52 +368,67 @@
   startBtn.addEventListener('click', () => {
     if (!gameRunning) {
       startGame();
-      game.focus();
     }
   });
 
   // Boşluk tuşuna basınca zıplama ve oyun bittiğinde yeniden başlama
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space' || e.key === ' ') {
-      e.preventDefault();
+    if (e.code === 'Space') {
       if (gameRunning) {
         jump();
       } else {
         startGame();
-        game.focus();
       }
     }
   });
 
-  // Oyun alanına tıklayınca zıpla, oyun bittiğinde yeniden başlat
-  game.addEventListener('click', () => {
+  // Mobilde oyun alanına dokununca zıplama
+  game.addEventListener('touchstart', e => {
+    e.preventDefault();
     if (gameRunning) {
       jump();
     } else {
       startGame();
-      game.focus();
     }
-  });
+  }, { passive: false });
 
-  // Firebase'den skorları çek ve sadece her kullanıcının en yüksek skorunu göster
-  function updateLeaderboard() {
-    const scoresRef = query(ref(db, 'scores'), orderByChild('score'));
-    onValue(scoresRef, (snapshot) => {
-      const allScores = {};
-      snapshot.forEach(childSnapshot => {
-        const { name, score } = childSnapshot.val();
-        // Eğer isim daha önce yoksa ya da yeni skor daha yüksekse kaydet
-        if (!allScores[name] || allScores[name] < score) {
-          allScores[name] = score;
+  // Skoru kaydet, kullanıcı adına göre kayıt yapar, eski skor varsa sadece yüksekse günceller
+  async function saveScore(name, newScore) {
+    if (newScore === 0) return;
+
+    const scoreRef = ref(db, 'scores/' + name);
+    try {
+      const snapshot = await get(scoreRef);
+      if (snapshot.exists()) {
+        const existingScore = snapshot.val().score;
+        if (newScore > existingScore) {
+          await set(scoreRef, { name, score: newScore });
         }
-      });
-      // En yüksek skora göre sıralama
-      const sortedScores = Object.entries(allScores)
-        .sort((a,b) => b[1] - a[1])
-        .slice(0,10); // en iyi 10
+      } else {
+        await set(scoreRef, { name, score: newScore });
+      }
+    } catch (error) {
+      console.error('Skor kaydederken hata:', error);
+    }
+  }
+
+  // Liderlik tablosunu güncelle
+  function updateLeaderboard() {
+    const scoresRef = ref(db, 'scores');
+    get(scoresRef).then(snapshot => {
+      if (!snapshot.exists()) {
+        leaderboardList.innerHTML = '<li>Henüz skor yok.</li>';
+        return;
+      }
+
+      const allScores = snapshot.val();
+
+      const sortedScores = Object.values(allScores)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
 
       leaderboardList.innerHTML = '';
-      sortedScores.forEach(([name, score]) => {
+      sortedScores.forEach(({ name, score }) => {
         const li = document.createElement('li');
         li.textContent = name;
         const span = document.createElement('span');
@@ -411,17 +436,14 @@
         li.appendChild(span);
         leaderboardList.appendChild(li);
       });
+    }).catch(error => {
+      console.error('Liderlik tablosu güncellenirken hata:', error);
     });
   }
 
-  // Skor kaydetme fonksiyonu (0 ise kaydetme)
-  function saveScore(name, newScore) {
-    if (newScore === 0) return;
-    const scoresRef = ref(db, 'scores');
-    push(scoresRef, { name, score: newScore });
-  }
-
+  // Sayfa açılır açılmaz liderlik tablosunu güncelle
   updateLeaderboard();
+
 </script>
 
 </body>
