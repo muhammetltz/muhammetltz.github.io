@@ -187,6 +187,25 @@
 
   </div>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4Er3_V3d2eX_cT6vn4FfjTIIK5K28MpM",
+    authDomain: "muhammetltz.firebaseapp.com",
+    databaseURL: "https://muhammetltz-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "muhammetltz",
+    storageBucket: "muhammetltz.firebasestorage.app",
+    messagingSenderId: "283787846929",
+    appId: "1:283787846929:web:547f2b01dbbe559e2b98b0",
+    measurementId: "G-6HCLQCYNTJ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 <script>
   const userNameInput = document.getElementById('userNameInput');
   const startBtn = document.getElementById('startBtn');
@@ -313,56 +332,4 @@
       }
     } else {
       // Yeni kullanıcıysa ekle
-      scores.push({ name, score: newScore });
-    }
-
-    // Skorları sırala ve en iyi 5'i al
-    scores.sort((a,b) => b.score - a.score);
-    if (scores.length > 5) scores = scores.slice(0,5);
-
-    localStorage.setItem('dinoScores', JSON.stringify(scores));
-  }
-
-  // Liderlik tablosunu güncelle
-  function updateLeaderboard() {
-    const scores = getScores();
-    leaderboardList.innerHTML = '';
-    if (scores.length === 0) {
-      leaderboardList.innerHTML = '<li>Henüz skor yok.</li>';
-      return;
-    }
-    scores.forEach((entry) => {
-      const li = document.createElement('li');
-      li.textContent = `${entry.name}`;
-      const span = document.createElement('span');
-      span.textContent = entry.score;
-      li.appendChild(span);
-      leaderboardList.appendChild(li);
-    });
-  }
-
-  // Klavyeden boşluk ile atlama ve oyunu başlatma
-  window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-      e.preventDefault();
-      if (!gameRunning) {
-        startGame();
-      } else {
-        jump();
-      }
-    }
-  });
-
-  gameOverText.addEventListener('click', () => {
-    if (!gameRunning) startGame();
-  });
-
-  startBtn.addEventListener('click', () => {
-    startGame();
-  });
-
-  updateLeaderboard();
-</script>
-
-</body>
-</html>
+      scores.push({ name,
