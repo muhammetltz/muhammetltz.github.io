@@ -5,21 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dinozor Oyunu + Liderlik Tablosu</title>
 <style>
+  /* GENEL STİL */
   body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    display: flex; justify-content: center; align-items: flex-start;
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start;
     min-height: 100vh;
     padding: 20px;
   }
+
+  /* ÜST MENÜ */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #004e92, #000428);
+    padding: 10px 20px;
+    box-sizing: border-box;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav .logo {
+    color: #a3d2ca;
+    font-weight: bold;
+    font-size: 20px;
+    user-select: none;
+  }
+  nav a {
+    color: #e0f7fa;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+
+  /* KONTEYNER */
   #container {
     width: 650px;
     background: white;
     border: 2px solid #333;
     border-radius: 8px;
     padding: 20px;
+    margin-top: 50px; /* Menü alanından aşağı itmek için */
   }
+
+  /* OYUN ALANI */
   #game {
     position: relative;
     width: 600px;
@@ -118,6 +158,14 @@
 </style>
 </head>
 <body>
+
+  <!-- ÜST MENÜ -->
+  <nav>
+    <div class="logo">MGL</div>
+    <a href="index.html">Ana Sayfa</a>
+  </nav>
+
+  <!-- OYUN VE LİDERLİK TABLOSU -->
   <div id="container">
 
     <div id="userNameSection">
@@ -315,5 +363,6 @@
 
   updateLeaderboard();
 </script>
+
 </body>
 </html>
