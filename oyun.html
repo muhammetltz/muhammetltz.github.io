@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dinozor Oyunu + Liderlik Tablosu</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  #container {
+    width: 650px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  #game {
+    position: relative;
+    width: 600px;
+    height: 150px;
+    background-color: #fff;
+    border: 2px solid #333;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+  #dino {
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+    width: 40px;
+    height: 40px;
+    background-color: #555;
+    border-radius: 5px;
+  }
+  #dino.jump {
+    animation: jump 500ms ease forwards;
+  }
+  @keyframes jump {
+    0%   { bottom: 0; }
+    50%  { bottom: 80px; }
+    100% { bottom: 0; }
+  }
+  #obstacle {
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 40px;
+    background-color: #d33;
+    border-radius: 3px;
+  }
+  #score {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+  }
+  #gameOver {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #d33;
+    display: none;
+    cursor: pointer;
+  }
+
+  /* Kullanıcı adı input */
+  #userNameSection {
+    margin-bottom: 20px;
+  }
+  #userNameSection label {
+    font-weight: bold;
+  }
+  #userNameInput {
+    padding: 6px 8px;
+    font-size: 16px;
+    margin-left: 10px;
+    width: 220px;
+  }
+  #startBtn {
+    padding: 8px 16px;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  /* Liderlik tablosu */
+  #leaderboard {
+    margin-top: 20px;
+  }
+  #leaderboard h2 {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  #leaderboardList {
+    list-style: none;
+    padding-left: 0;
+  }
+  #leaderboardList li {
+    background: #eee;
+    margin-bottom: 5px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+  <div id="container">
+
+    <div id="userNameSection">
+      <label for="userNameInput">Kullanıcı Adı:</label>
+      <input type="text" id="userNameInput" placeholder="Adınızı girin" maxlength="15" />
+      <button id="startBtn" disabled>Oyunu Başlat</button>
+    </div>
+
+    <div id="game">
+      <div id="score">Skor: 0</div>
+      <div id="dino"></div>
+      <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
+    </div>
+
+    <div id="leaderboard">
+      <h2>🏆 Liderlik Tablosu</h2>
+      <ul id="leaderboardList"></ul>
+    </div>
+
+  </div>
+
+<script>
+  const userNameInput = document.getElementById('userNameInput');
+  const startBtn = document.getElementById('startBtn');
+  const game = document.getElementById('game');
+  const dino = document.getElementById('dino');
+  const scoreDisplay = document.getElementById('score');
+  const gameOverText = document.getElementById('gameOver');
+  const leaderboardList = document.getElementById('leaderboardList');
+
+  let gameRunning = false;
+  let score = 0;
+  let obstacle = null;
+  const gameWidth = 600;
+  const minSpeed = 3;
+  const maxSpeed = 12;
+  const speedIncrement = 0.3;
+  let obstacleLeft;
+  let gameSpeed;
+  let userName = '';
+
+  userNameInput.addEventListener('input', () => {
+    startBtn.disabled = userNameInput.value.trim() === '';
+  });
+
+  function jump() {
+    if (dino.classList.contains('jump')) return;
+    dino.classList.add('jump');
+    setTimeout(() => {
+      dino.classList.remove('jump');
+    }, 500);
+  }
+
+  function createObstacle() {
+    if (!gameRunning) return;
+
+    obstacle = document.createElement('div');
+    obstacle.id = 'obstacle';
+    game.appendChild(obstacle);
+
+    obstacleLeft = gameWidth;
+    obstacle.style.left = obstacleLeft + 'px';
+
+    gameSpeed = Math.min(minSpeed + speedIncrement * score, maxSpeed);
+
+    function moveObstacle() {
+      if (!gameRunning) return;
+
+      obstacleLeft -= gameSpeed;
+      obstacle.style.left = obstacleLeft + 'px';
+
+      const dinoRect = dino.getBoundingClientRect();
+      const obsRect = obstacle.getBoundingClientRect();
+
+      if (
+        dinoRect.right > obsRect.left &&
+        dinoRect.left < obsRect.right &&
+        dinoRect.bottom > obsRect.top
+      ) {
+        endGame();
+        return;
+      }
+
+      if (obstacleLeft < -20) {
+        obstacle.remove();
+        obstacle = null;
+        if (gameRunning) {
+          score++;
+          scoreDisplay.textContent = 'Skor: ' + score;
+          setTimeout(createObstacle, Math.random() * 1500 + 1000);
+        }
+        return;
+      }
+
+      requestAnimationFrame(moveObstacle);
+    }
+
+    moveObstacle();
+  }
+
+  function endGame() {
+    gameRunning = false;
+    gameOverText.style.display = 'block';
+    if (obstacle) {
+      obstacle.remove();
+      obstacle = null;
+    }
+    saveScore(userName, score);
+    updateLeaderboard();
+  }
+
+  function startGame() {
+    if (userNameInput.value.trim() === '') {
+      alert('Lütfen önce kullanıcı adınızı girin!');
+      return;
+    }
+    userName = userNameInput.value.trim();
+    score = 0;
+    scoreDisplay.textContent = 'Skor: 0';
+    gameOverText.style.display = 'none';
+    gameRunning = true;
+    createObstacle();
+  }
+
+  // Skorları getir
+  function getScores() {
+    const scores = localStorage.getItem('dinoScores');
+    return scores ? JSON.parse(scores) : [];
+  }
+
+  // Yeni skor kaydetme (kullanıcının önceki skorundan yüksekse güncelle)
+  function saveScore(name, newScore) {
+    if (newScore === 0) return; // Sıfır skor kaydetme
+    let scores = getScores();
+
+    // Kullanıcının eski skorunu bul
+    const existingIndex = scores.findIndex(entry => entry.name === name);
+
+    if (existingIndex !== -1) {
+      // Önceki skordan yüksekse güncelle
+      if (newScore > scores[existingIndex].score) {
+        scores[existingIndex].score = newScore;
+      } else {
+        return; // Daha düşük veya eşitse kaydetme
+      }
+    } else {
+      // Yeni kullanıcıysa ekle
+      scores.push({ name, score: newScore });
+    }
+
+    // Skorları sırala ve en iyi 5'i al
+    scores.sort((a,b) => b.score - a.score);
+    if (scores.length > 5) scores = scores.slice(0,5);
+
+    localStorage.setItem('dinoScores', JSON.stringify(scores));
+  }
+
+  // Liderlik tablosunu güncelle
+  function updateLeaderboard() {
+    const scores = getScores();
+    leaderboardList.innerHTML = '';
+    if (scores.length === 0) {
+      leaderboardList.innerHTML = '<li>Henüz skor yok.</li>';
+      return;
+    }
+    scores.forEach((entry) => {
+      const li = document.createElement('li');
+      li.textContent = `${entry.name}`;
+      const span = document.createElement('span');
+      span.textContent = entry.score;
+      li.appendChild(span);
+      leaderboardList.appendChild(li);
+    });
+  }
+
+  // Klavyeden boşluk ile atlama ve oyunu başlatma
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!gameRunning) {
+        startGame();
+      } else {
+        jump();
+      }
+    }
+  });
+
+  gameOverText.addEventListener('click', () => {
+    if (!gameRunning) startGame();
+  });
+
+  startBtn.addEventListener('click', () => {
+    startGame();
+  });
+
+  updateLeaderboard();
+</script>
+</body>
+</html>
