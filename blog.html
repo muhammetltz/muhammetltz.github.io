@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Blog - Muhammed Güven Lotoz</title>
+    <title>Blog - MGL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -44,9 +44,7 @@
   <header class="bg-white shadow-sm sticky top-0 z-10">
     <div class="container mx-auto px-4 py-4">
       <div class="flex justify-between items-center">
-        <a href="index.html" class="text-2xl font-bold gradient-text"
-          >Muhammed Güven Lotoz</a
-        >
+        <a href="index.html" class="text-2xl font-bold gradient-text">MGL</a>
 
         <!-- Mobile menu button -->
         <button
@@ -183,18 +181,17 @@
   <!-- Footer -->
   <footer class="bg-gray-800 text-white py-12">
     <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-          <a href="index.html" class="text-2xl font-bold gradient-text"
-            >Muhammed Güven Lotoz</a
-          >
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <div>
+          <a href="index.html" class="text-2xl font-bold gradient-text">MGL</a>
           <p class="text-gray-400 mt-2">Öğrenmeye ve paylaşmaya devam...</p>
         </div>
-        <div class="flex space-x-6">
+        <div class="flex space-x-6 mt-4 md:mt-0">
           <a
             href="https://twitter.com/muhammetltz"
             target="_blank"
             class="text-gray-400 hover:text-white transition"
+            aria-label="Twitter"
           >
             <i class="fab fa-twitter text-xl"></i>
           </a>
@@ -202,6 +199,7 @@
             href="https://www.youtube.com/@muhammetltz"
             target="_blank"
             class="text-gray-400 hover:text-white transition"
+            aria-label="YouTube"
           >
             <i class="fab fa-youtube text-xl"></i>
           </a>
@@ -209,6 +207,7 @@
             href="https://instagram.com/muhammetltz"
             target="_blank"
             class="text-gray-400 hover:text-white transition"
+            aria-label="Instagram"
           >
             <i class="fab fa-instagram text-xl"></i>
           </a>
@@ -216,19 +215,21 @@
       </div>
       <hr class="border-gray-700 my-8" />
       <div
-        class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400"
+        class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 space-y-4 md:space-y-0"
       >
         <p>© 2025 Muhammed Güven Lotoz. Tüm hakları saklıdır.</p>
-        <div class="mt-4 md:mt-0">
-          <a href="index.html" class="hover:text-white transition">Ana Sayfa</a>
-          <a href="hakkimda.html" class="ml-4 hover:text-white transition"
-            >Hakkımda</a
+        <div>
+          <a href="mailto:muhammedguvenlotoz@gmail.com" class="hover:text-white transition mr-6"
+            ><i class="fas fa-envelope mr-1"></i> muhammedguvenlotoz@gmail.com</a
           >
-          <a href="blog.html" class="ml-4 hover:text-white transition">Blog</a>
-          <a href="iletisim.html" class="ml-4 hover:text-white transition"
-            >İletişim</a
-          >
+          <span>Samsun, Türkiye</span>
         </div>
+        <nav>
+          <a href="index.html" class="hover:text-white transition mr-4">Ana Sayfa</a>
+          <a href="hakkimda.html" class="hover:text-white transition mr-4">Hakkımda</a>
+          <a href="blog.html" class="hover:text-white transition mr-4">Blog</a>
+          <a href="iletisim.html" class="hover:text-white transition">İletişim</a>
+        </nav>
       </div>
     </div>
   </footer>
