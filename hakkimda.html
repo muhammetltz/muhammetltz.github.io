@@ -201,16 +201,16 @@
                     <a href="#" class="text-gray-400 hover:text-white transition duration-300">
                         <i class="fab fa-linkedin-in text-xl"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                    <a href="https://x.com/muhammetltz" target="_blank" class="text-gray-400 hover:text-white transition duration-300">
                         <i class="fab fa-twitter text-xl"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                    <a href="https://www.instagram.com/muhammetltz/" target="_blank" class="text-gray-400 hover:text-white transition duration-300">
                         <i class="fab fa-instagram text-xl"></i>
                     </a>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
-                <p>&copy; 2023 Muhammed Güven Lotoz. Tüm hakları saklıdır.</p>
+                <p>&copy; 2025 Muhammed Güven Lotoz. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
@@ -247,17 +247,16 @@
 
             if (!isDeleting && charIndex === currentText.length) {
                 isDeleting = true;
-                typingSpeed = 1500; // Pause at end of word
+                typingSpeed = 1500;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 textIndex = (textIndex + 1) % texts.length;
-                typingSpeed = 500; // Pause before typing next word
+                typingSpeed = 500;
             }
 
             setTimeout(type, typingSpeed);
         }
 
-        // Start typing effect
         setTimeout(type, 1000);
     </script>
 </body>
