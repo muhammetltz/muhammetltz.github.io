@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dinozor Oyunu + Liderlik Tablosu (Firebase)</title>
+<title>Kutu ile engelden kaç!</title>
 <style>
-  /* GENEL STİL */
   body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -23,9 +22,7 @@
     padding: 10px 20px;
     box-sizing: border-box;
     z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
   }
   nav .logo {
     color: #a3d2ca;
@@ -77,7 +74,7 @@
     50%  { bottom: 80px; }
     100% { bottom: 0; }
   }
-  #obstacle {
+  .obstacle {
     position: absolute;
     bottom: 0;
     width: 20px;
@@ -146,34 +143,35 @@
 </head>
 <body>
 
-<nav>
-  <div class="logo">MGL</div>
-  <a href="index.html">Ana Sayfa</a>
-</nav>
+  <nav>
+    <div class="logo">MGL</div>
+    <a href="index.html">Ana Sayfa</a>
+  </nav>
 
-<div id="container">
-  <div id="userNameSection">
-    <label for="userNameInput">Kullanıcı Adı:</label>
-    <input type="text" id="userNameInput" placeholder="Adınızı girin" maxlength="15" />
-    <button id="startBtn" disabled>Oyunu Başlat</button>
+  <div id="container">
+
+    <div id="userNameSection">
+      <label for="userNameInput">Kullanıcı Adı:</label>
+      <input type="text" id="userNameInput" placeholder="Adınızı girin" maxlength="15" />
+      <button id="startBtn" disabled>Oyunu Başlat</button>
+    </div>
+
+    <div id="game">
+      <div id="score">Skor: 0</div>
+      <div id="dino"></div>
+      <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
+    </div>
+
+    <div id="leaderboard">
+      <h2>🏆 Liderlik Tablosu</h2>
+      <ul id="leaderboardList"></ul>
+    </div>
+
   </div>
 
-  <div id="game">
-    <div id="score">Skor: 0</div>
-    <div id="dino"></div>
-    <div id="gameOver">Oyun Bitti! Yeniden başlatmak için tıkla veya boşluk tuşuna bas.</div>
-  </div>
-
-  <div id="leaderboard">
-    <h2>🏆 Liderlik Tablosu</h2>
-    <ul id="leaderboardList"></ul>
-  </div>
-</div>
-
-<!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, set, get, child, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB4Er3_V3d2eX_cT6vn4FfjTIIK5K28MpM",
@@ -201,14 +199,13 @@
   let score = 0;
   let obstacle = null;
   const gameWidth = 600;
-  const minSpeed = 5;  // başlangıç hızı biraz artırıldı
-  const maxSpeed = 14;
-  const speedIncrement = 0.5;
+  const minSpeed = 6;
+  const maxSpeed = 15;
+  const speedIncrement = 0.4;
   let obstacleLeft;
   let gameSpeed;
   let userName = '';
 
-  // input kontrolü
   userNameInput.addEventListener('input', () => {
     startBtn.disabled = userNameInput.value.trim() === '';
   });
@@ -224,8 +221,13 @@
   function createObstacle() {
     if (!gameRunning) return;
 
+    if (obstacle) {
+      obstacle.remove();
+      obstacle = null;
+    }
+
     obstacle = document.createElement('div');
-    obstacle.id = 'obstacle';
+    obstacle.classList.add('obstacle');
     game.appendChild(obstacle);
 
     obstacleLeft = gameWidth;
@@ -234,7 +236,13 @@
     gameSpeed = Math.min(minSpeed + speedIncrement * score, maxSpeed);
 
     function moveObstacle() {
-      if (!gameRunning) return;
+      if (!gameRunning) {
+        if (obstacle) {
+          obstacle.remove();
+          obstacle = null;
+        }
+        return;
+      }
 
       obstacleLeft -= gameSpeed;
       obstacle.style.left = obstacleLeft + 'px';
@@ -243,9 +251,9 @@
       const obsRect = obstacle.getBoundingClientRect();
 
       if (
-        dinoRect.right > obsRect.left &&
-        dinoRect.left < obsRect.right &&
-        dinoRect.bottom > obsRect.top
+        dinoRect.right > obsRect.left + 5 && // küçük tolerans eklendi
+        dinoRect.left < obsRect.right - 5 &&
+        dinoRect.bottom > obsRect.top + 10 // Dino zıpladığında biraz daha tolerans
       ) {
         endGame();
         return;
@@ -257,8 +265,7 @@
         if (gameRunning) {
           score++;
           scoreDisplay.textContent = 'Skor: ' + score;
-          // sonraki engeli biraz daha az beklet
-          setTimeout(createObstacle, Math.random() * 1000 + 800);
+          setTimeout(createObstacle, Math.random() * 1200 + 800);
         }
         return;
       }
@@ -293,76 +300,15 @@
     createObstacle();
   }
 
-  // Firebase'den skorları çek (en yüksek 5)
-  async function updateLeaderboard() {
-    leaderboardList.innerHTML = '';
-    try {
-      const dbRef = ref(db);
-      const scoresQuery = query(ref(db, 'scores'), orderByChild('score'), limitToLast(5));
-      const snapshot = await get(scoresQuery);
-      if (snapshot.exists()) {
-        // snapshot'u arraya çevir ve en yüksekten başlatmak için ters sırala
-        const scores = Object.entries(snapshot.val())
-          .map(([key, val]) => ({ name: val.name, score: val.score }))
-          .sort((a, b) => b.score - a.score);
-        
-        for (const entry of scores) {
-          const li = document.createElement('li');
-          li.textContent = entry.name;
-          const span = document.createElement('span');
-          span.textContent = entry.score;
-          li.appendChild(span);
-          leaderboardList.appendChild(li);
-        }
-      } else {
-        leaderboardList.innerHTML = '<li>Henüz skor yok</li>';
-      }
-    } catch (e) {
-      console.error('Liderlik tablosu güncellenirken hata:', e);
-    }
-  }
-
-  // Skoru Firebase'e kaydet, önceki skor varsa yüksekse güncelle
-  async function saveScore(name, newScore) {
-    if (newScore === 0) return;
-    try {
-      const scoresRef = ref(db, 'scores');
-      const snapshot = await get(scoresRef);
-      let scores = snapshot.exists() ? snapshot.val() : {};
-
-      // Kullanıcının mevcut skorunu bul
-      let userKey = null;
-      for (const key in scores) {
-        if (scores[key].name === name) {
-          userKey = key;
-          break;
-        }
-      }
-
-      if (userKey) {
-        // Önceki skoru karşılaştır
-        if (newScore > scores[userKey].score) {
-          await set(ref(db, `scores/${userKey}`), { name, score: newScore });
-        }
-      } else {
-        // Yeni skor ekle
-        const newKey = crypto.randomUUID(); // Rastgele key oluştur
-        await set(ref(db, `scores/${newKey}`), { name, score: newScore });
-      }
-    } catch (e) {
-      console.error('Skor kaydedilirken hata:', e);
-    }
-  }
-
-  // Oyun başlatma butonu
   startBtn.addEventListener('click', () => {
-    if (!gameRunning) startGame();
+    if (!gameRunning) {
+      startGame();
+    }
   });
 
-  // Boşluk tuşu ile zıplama ve oyun yeniden başlatma
+  // Boşluk tuşuna basınca zıplama ve oyun bittiğinde yeniden başlama
   document.addEventListener('keydown', e => {
     if (e.code === 'Space') {
-      e.preventDefault();
       if (gameRunning) {
         jump();
       } else {
@@ -371,12 +317,35 @@
     }
   });
 
-  // Oyun bitti yazısına tıklayınca yeniden başlat
-  gameOverText.addEventListener('click', () => {
-    if (!gameRunning) startGame();
-  });
+  // Skorları Firebase’den getir ve güncelle
+  function updateLeaderboard() {
+    const scoresRef = query(ref(db, 'scores'), orderByChild('score'), limitToLast(10));
+    onValue(scoresRef, (snapshot) => {
+      const scores = [];
+      snapshot.forEach(childSnapshot => {
+        scores.push(childSnapshot.val());
+      });
+      scores.sort((a, b) => b.score - a.score);
+      leaderboardList.innerHTML = '';
+      scores.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = entry.name;
+        const span = document.createElement('span');
+        span.textContent = entry.score;
+        li.appendChild(span);
+        leaderboardList.appendChild(li);
+      });
+    });
+  }
 
-  // İlk yüklemede liderlik tablosunu güncelle
+  // Skor kaydetme fonksiyonu
+  function saveScore(name, newScore) {
+    if (newScore === 0) return;
+    const scoresRef = ref(db, 'scores');
+    // Her skor yeni bir kayıt olarak eklenecek
+    push(scoresRef, { name, score: newScore });
+  }
+
   updateLeaderboard();
 </script>
 
