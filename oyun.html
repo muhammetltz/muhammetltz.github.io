@@ -230,6 +230,9 @@
     startBtn.disabled = userNameInput.value.trim() === '';
   });
 
+  // **Burada startBtn tıklama eventini ekledim**
+  startBtn.addEventListener('click', startGame);
+
   function jump() {
     if (dino.classList.contains('jump')) return;
     dino.classList.add('jump');
@@ -332,4 +335,57 @@
       }
     } else {
       // Yeni kullanıcıysa ekle
-      scores.push({ name,
+      scores.push({ name, score: newScore });
+    }
+
+    // Skorları puana göre azalan sırada sırala
+    scores.sort((a, b) => b.score - a.score);
+
+    // En fazla 10 kaydı tut
+    if (scores.length > 10) {
+      scores = scores.slice(0, 10);
+    }
+
+    localStorage.setItem('dinoScores', JSON.stringify(scores));
+  }
+
+  // Liderlik tablosunu güncelle
+  function updateLeaderboard() {
+    const scores = getScores();
+    leaderboardList.innerHTML = '';
+    scores.forEach(entry => {
+      const li = document.createElement('li');
+      li.textContent = entry.name;
+      const span = document.createElement('span');
+      span.textContent = entry.score;
+      li.appendChild(span);
+      leaderboardList.appendChild(li);
+    });
+  }
+
+  // Oyun bitti yazısına tıklayınca veya boşluk tuşuna basınca oyunu yeniden başlat
+  gameOverText.addEventListener('click', () => {
+    if (!gameRunning) startGame();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      if (gameRunning) {
+        jump();
+      } else {
+        startGame();
+      }
+    }
+  });
+
+  // Dinozoru zıplatmak için tıklama veya boşluk tuşu (oyun sırasında)
+  game.addEventListener('click', () => {
+    if (gameRunning) jump();
+  });
+
+  // Sayfa yüklendiğinde liderlik tablosunu güncelle
+  updateLeaderboard();
+</script>
+
+</body>
+</html>
