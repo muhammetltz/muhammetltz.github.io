@@ -1,125 +1,129 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Basit Sohbet Uygulaması</title>
-<style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: Arial, sans-serif;
-    background: #f4f7f9;
-    display: flex; flex-direction: column; min-height: 100vh;
-  }
-  #login, #chat {
-    margin: auto; background: white; padding: 20px;
-    border-radius: 8px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
-    width: 100%; max-width: 420px;
-  }
-  #login { display: block; }
-  #chat { display: none; height: 90vh; display: flex; flex-direction: column; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LTZ CHAT</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Arial, sans-serif;
+      background: #f4f7f9;
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    #login, #chat {
+      margin: auto; background: white; padding: 20px;
+      border-radius: 8px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+      width: 100%; max-width: 420px;
+    }
+    #login { display: block; }
+    #chat { display: none; height: 90vh; display: flex; flex-direction: column; }
 
-  h2 { text-align: center; margin-top: 0; }
+    h2 { text-align: center; margin-top: 0; }
 
-  label { display: block; margin-top: 10px; font-weight: bold; }
-  input[type=text], input[type=password] {
-    width: 100%; padding: 8px; margin-top: 5px;
-    border: 1px solid #ccc; border-radius: 4px;
-  }
-  button {
-    margin-top: 15px; width: 100%;
-    padding: 10px; font-size: 16px;
-    border:none; background: #1976d2; color: white; border-radius: 4px;
-    cursor: pointer;
-  }
-  button:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type=text], input[type=password] {
+      width: 100%; padding: 8px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 4px;
+    }
+    button {
+      margin-top: 15px; width: 100%;
+      padding: 10px; font-size: 16px;
+      border: none; background: #1976d2; color: white; border-radius: 4px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
 
-  #activeUsers {
-    margin-top: 15px;
-    background: #e3f2fd;
-    padding: 10px;
-    border-radius: 6px;
-    height: 80px;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  #activeUsers span {
-    display: inline-block;
-    background: #2196f3;
-    color: white;
-    padding: 6px 10px;
-    margin-right: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    user-select: none;
-  }
-  #activeUsers span.self {
-    background: #4caf50;
-  }
+    #activeUsers {
+      margin-top: 15px;
+      background: #e3f2fd;
+      padding: 10px;
+      border-radius: 6px;
+      height: 80px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    #activeUsers span {
+      display: inline-block;
+      background: #2196f3;
+      color: white;
+      padding: 6px 10px;
+      margin-right: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #activeUsers span.self {
+      background: #4caf50;
+    }
 
-  #messages {
-    flex: 1;
-    margin-top: 15px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 15px;
-    overflow-y: auto;
-  }
-  .msg {
-    margin-bottom: 12px;
-    max-width: 75%;
-    padding: 10px;
-    border-radius: 10px;
-    clear: both;
-  }
-  .msg.me {
-    background: #1976d2;
-    color: white;
-    float: right;
-    border-bottom-right-radius: 0;
-  }
-  .msg.other {
-    background: #e3f2fd;
-    color: #000;
-    float: left;
-    border-bottom-left-radius: 0;
-  }
-  #messageInputContainer {
-    display: flex;
-    margin-top: 10px;
-  }
-  #messageInput {
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 6px 0 0 6px;
-    border: 1px solid #ccc;
-    border-right: none;
-  }
-  #sendBtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    border:none;
-    background: #1976d2;
-    color: white;
-    border-radius: 0 6px 6px 0;
-    cursor: pointer;
-  }
-  #sendBtn:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
+    #messages {
+      flex: 1;
+      margin-top: 15px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .msg {
+      margin-bottom: 12px;
+      max-width: 75%;
+      padding: 10px;
+      border-radius: 10px;
+      clear: both;
+    }
+    .msg.me {
+      background: #1976d2;
+      color: white;
+      float: right;
+      border-bottom-right-radius: 0;
+    }
+    .msg.other {
+      background: #e3f2fd;
+      color: #000;
+      float: left;
+      border-bottom-left-radius: 0;
+    }
 
-  #logoutBtn {
-    margin-top: 15px;
-    background: #f44336;
-  }
+    /* Mesaj input + gönder butonu */
+    #messageInputContainer {
+      display: flex;
+      margin-top: 10px;
+    }
+    #messageInput {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px 0 0 6px;
+      border: 1px solid #ccc;
+      border-right: none;
+      min-width: 0;
+    }
+    #sendBtn {
+      padding: 10px 12px;
+      font-size: 14px;
+      border: none;
+      background: #1976d2;
+      color: white;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+      width: auto;
+      flex-shrink: 0;
+    }
+    #sendBtn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
 
-</style>
+    #logoutBtn {
+      margin-top: 15px;
+      background: #f44336;
+    }
+  </style>
 </head>
 <body>
 
@@ -155,9 +159,8 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, set, get, child, onValue, update, push, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { getDatabase, ref, set, get, child, onValue, update, push, remove, off } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  // Firebase config (senin verdiğin)
   const firebaseConfig = {
     apiKey: "AIzaSyDoEh6kXDhwtbJV583Blzh_RN2dh1seyck",
     authDomain: "sohbet-31244.firebaseapp.com",
@@ -172,7 +175,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // DOM Elemanları
   const loginDiv = document.getElementById('login');
   const chatDiv = document.getElementById('chat');
   const usernameInput = document.getElementById('usernameInput');
@@ -190,38 +192,30 @@
   let currentChatUser = null;
   let messagesRef = null;
 
-  // Kullanıcı adı ve şifre girildiğinde buton aktifleşsin
   function updateLoginBtn() {
     loginBtn.disabled = !(usernameInput.value.trim() && passwordInput.value.trim());
   }
   usernameInput.addEventListener('input', updateLoginBtn);
   passwordInput.addEventListener('input', updateLoginBtn);
 
-  // Giriş / Kayıt işlemi
   loginBtn.addEventListener('click', async () => {
     loginError.style.display = 'none';
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-
     if(!username || !password) return;
 
     try {
-      // Kullanıcılar veritabanı referansı
       const usersRef = ref(db, 'users');
       const userSnapshot = await get(child(usersRef, username));
-
       if(userSnapshot.exists()) {
-        // Kullanıcı var, şifre kontrol et
         const userData = userSnapshot.val();
         if(userData.password !== password) {
           loginError.textContent = 'Hatalı şifre.';
           loginError.style.display = 'block';
           return;
         }
-        // Giriş başarılı
         currentUser = username;
       } else {
-        // Yeni kullanıcı, kayıt ol
         await set(child(usersRef, username), {
           password,
           active: true,
@@ -230,24 +224,18 @@
         currentUser = username;
       }
 
-      // Kullanıcı aktif yap
       await update(ref(db, 'users/' + currentUser), {
         active: true,
         lastSeen: Date.now()
       });
 
-      // Gösterim ayarları
       userDisplay.textContent = currentUser;
       loginDiv.style.display = 'none';
       chatDiv.style.display = 'flex';
 
-      // Aktif kullanıcıları göster ve dinle
       listenActiveUsers();
-
-      // Mesajları göster
       setupMessages();
 
-      // Butonları aktif et
       sendBtn.disabled = true;
       messageInput.value = '';
       messageInput.focus();
@@ -258,7 +246,6 @@
     }
   });
 
-  // Aktif kullanıcılar listesini dinle
   function listenActiveUsers() {
     const usersRef = ref(db, 'users');
     onValue(usersRef, (snapshot) => {
@@ -283,12 +270,10 @@
     });
   }
 
-  // Mesajları ayarla
   function setupMessages() {
     messagesDiv.innerHTML = '<em>Bir kullanıcı seçerek sohbet başlatabilirsiniz.</em>';
   }
 
-  // Chat mesajlarını yükle
   function loadChatMessages(user1, user2) {
     if(messagesRef) off(messagesRef);
     messagesDiv.innerHTML = '';
@@ -297,7 +282,6 @@
     messageInput.value = '';
     messageInput.focus();
 
-    // Mesajları kullanıcı ikilisi için alacağız, küçükten büyüğe sırala
     const chatId = user1 < user2 ? user1 + '_' + user2 : user2 + '_' + user1;
     messagesRef = ref(db, 'messages/' + chatId);
 
@@ -315,7 +299,6 @@
     });
   }
 
-  // Mesaj gönderme
   sendBtn.addEventListener('click', async () => {
     const text = messageInput.value.trim();
     if(!text || !currentChatUser) return;
@@ -331,14 +314,12 @@
     messageInput.focus();
   });
 
-  // Enter ile mesaj gönderme
   messageInput.addEventListener('keydown', e => {
     if(e.key === 'Enter' && !sendBtn.disabled) {
       sendBtn.click();
     }
   });
 
-  // Çıkış yap
   logoutBtn.addEventListener('click', async () => {
     if(!currentUser) return;
     await update(ref(db, 'users/' + currentUser), {
@@ -357,7 +338,6 @@
     activeUsersDiv.innerHTML = '';
     messagesDiv.innerHTML = '';
   });
-
 </script>
 
 </body>
