@@ -1,57 +1,256 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Blog - Muhammet'in Sitesi</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      color: #222;
-      padding: 30px;
-      max-width: 700px;
-      margin: auto;
-    }
-    nav a {
-      margin-right: 15px;
-      text-decoration: none;
-      color: #0077cc;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    article {
-      margin-bottom: 20px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 10px;
-    }
-    article h2 {
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    article p {
-      color: #555;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog - Muhammed Güven Lotoz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .gradient-text {
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .nav-link {
+        position: relative;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #3b82f6;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover::after {
+        width: 100%;
+      }
+    </style>
 </head>
-<body>
-  <nav>
-    <a href="index.html">Ana Sayfa</a>
-    <a href="hakkimda.html">Hakkımda</a>
-    <a href="iletisim.html">İletişim</a>
-  </nav>
+<body class="bg-gray-50 min-h-screen font-sans">
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex justify-between items-center">
+        <a href="index.html" class="text-2xl font-bold gradient-text"
+          >Muhammed Güven Lotoz</a
+        >
 
-  <h1>Blog</h1>
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-button"
+          class="md:hidden text-gray-600 focus:outline-none"
+        >
+          <i class="fas fa-bars text-xl"></i>
+        </button>
 
-  <article>
-    <h2>İlk Yazım</h2>
-    <p>Merhaba! Bu benim ilk blog yazım. Web sitesi oluşturmanın heyecanını yaşıyorum.</p>
-  </article>
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex space-x-8">
+          <a
+            href="index.html"
+            class="nav-link text-gray-700 hover:text-blue-500 transition"
+            >Ana Sayfa</a
+          >
+          <a
+            href="hakkimda.html"
+            class="nav-link text-gray-700 hover:text-blue-500 transition"
+            >Hakkımda</a
+          >
+          <a href="blog.html" class="nav-link text-blue-600 font-medium"
+            >Blog</a
+          >
+          <a
+            href="iletisim.html"
+            class="nav-link text-gray-700 hover:text-blue-500 transition"
+            >İletişim</a
+          >
+        </nav>
+      </div>
 
-  <article>
-    <h2>HTML Nedir?</h2>
-    <p>HTML, web sayfalarının yapısını belirleyen bir işaretleme dilidir...</p>
-  </article>
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2">
+        <a
+          href="index.html"
+          class="block py-2 text-gray-700 hover:text-blue-500"
+          >Ana Sayfa</a
+        >
+        <a
+          href="hakkimda.html"
+          class="block py-2 text-gray-700 hover:text-blue-500"
+          >Hakkımda</a
+        >
+        <a href="blog.html" class="block py-2 text-blue-600 font-medium"
+          >Blog</a
+        >
+        <a
+          href="iletisim.html"
+          class="block py-2 text-gray-700 hover:text-blue-500"
+          >İletişim</a
+        >
+      </div>
+    </div>
+  </header>
 
+  <!-- Hero Section -->
+  <section
+    class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-16"
+  >
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
+      <p class="text-xl opacity-90">
+        Düşüncelerimi, deneyimlerimi ve öğrendiklerimi paylaştığım yer
+      </p>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <main class="container mx-auto px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+      <!-- Article 1 -->
+      <article
+        class="article-card bg-white rounded-lg shadow-md overflow-hidden mb-10 transition duration-300"
+      >
+        <div class="p-6 md:p-8">
+          <div class="flex items-center mb-4">
+            <span
+              class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+              >Yeni</span
+            >
+            <span class="text-gray-500 text-sm ml-3"
+              ><i class="far fa-calendar-alt mr-1"></i> 15 Haziran 2023</span
+            >
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            İlk Yazım
+          </h2>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            Merhaba! Bu benim ilk blog yazım. Web sitesi oluşturmanın
+            heyecanını yaşıyorum. Bu süreçte öğrendiklerimi ve deneyimlerimi
+            burada paylaşacağım. Yeni başlayanlar için faydalı olabilecek
+            içerikler üretmeyi planlıyorum.
+          </p>
+          <a
+            href="#"
+            class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+          >
+            Devamını oku
+            <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- Newsletter Subscription -->
+      <div
+        class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 md:p-8 mb-10"
+      >
+        <h3 class="text-xl font-bold text-gray-800 mb-3">
+          Yeni yazıları kaçırmayın
+        </h3>
+        <p class="text-gray-600 mb-4">
+          Yeni blog yazılarım yayınlandığında e-posta ile haberdar olmak ister
+          misiniz?
+        </p>
+        <form class="flex flex-col sm:flex-row gap-3">
+          <input
+            type="email"
+            placeholder="E-posta adresiniz"
+            class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+          >
+            Abone Ol
+          </button>
+        </form>
+        <p class="text-xs text-gray-500 mt-3">E-postanızı asla paylaşmayacağız.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <a href="index.html" class="text-2xl font-bold gradient-text"
+            >Muhammed Güven Lotoz</a
+          >
+          <p class="text-gray-400 mt-2">Öğrenmeye ve paylaşmaya devam...</p>
+        </div>
+        <div class="flex space-x-6">
+          <a
+            href="https://twitter.com/muhammetltz"
+            target="_blank"
+            class="text-gray-400 hover:text-white transition"
+          >
+            <i class="fab fa-twitter text-xl"></i>
+          </a>
+          <a
+            href="https://www.youtube.com/@muhammetltz"
+            target="_blank"
+            class="text-gray-400 hover:text-white transition"
+          >
+            <i class="fab fa-youtube text-xl"></i>
+          </a>
+          <a
+            href="https://instagram.com/muhammetltz"
+            target="_blank"
+            class="text-gray-400 hover:text-white transition"
+          >
+            <i class="fab fa-instagram text-xl"></i>
+          </a>
+        </div>
+      </div>
+      <hr class="border-gray-700 my-8" />
+      <div
+        class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400"
+      >
+        <p>© 2025 Muhammed Güven Lotoz. Tüm hakları saklıdır.</p>
+        <div class="mt-4 md:mt-0">
+          <a href="index.html" class="hover:text-white transition">Ana Sayfa</a>
+          <a href="hakkimda.html" class="ml-4 hover:text-white transition"
+            >Hakkımda</a
+          >
+          <a href="blog.html" class="ml-4 hover:text-white transition">Blog</a>
+          <a href="iletisim.html" class="ml-4 hover:text-white transition"
+            >İletişim</a
+          >
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document
+      .getElementById("mobile-menu-button")
+      .addEventListener("click", function () {
+        const menu = document.getElementById("mobile-menu");
+        menu.classList.toggle("hidden");
+      });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+          behavior: "smooth",
+        });
+      });
+    });
+  </script>
 </body>
 </html>
