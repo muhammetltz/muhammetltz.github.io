@@ -1,94 +1,82 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hakkımda - Muhammed Güven Lotoz</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hakkımda - Muhammed Güven Lotoz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: #f8fafc;
-      }
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8fafc;
+    }
 
-      .nav-link {
-        position: relative;
-      }
+    .nav-link {
+      position: relative;
+    }
 
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #3b82f6;
-        transition: width 0.3s ease;
-      }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #3b82f6;
+      transition: width 0.3s ease;
+    }
 
-      .nav-link:hover::after {
-        width: 100%;
-      }
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
-      .profile-img {
-        transition: transform 0.3s ease;
-      }
+    .profile-img {
+      transition: transform 0.3s ease;
+    }
 
-      .profile-img:hover {
-        transform: scale(1.05);
-      }
+    .profile-img:hover {
+      transform: scale(1.05);
+    }
 
-      .typing-effect {
-        border-right: 2px solid;
-        animation: blink 0.75s step-end infinite;
-      }
+    .typing-effect {
+      border-right: 2px solid;
+      animation: blink 0.75s step-end infinite;
+    }
 
-      @keyframes blink {
-        from,
-        to {
-          border-color: transparent;
-        }
-        50% {
-          border-color: #3b82f6;
-        }
+    @keyframes blink {
+      from,
+      to {
+        border-color: transparent;
       }
-    </style>
+      50% {
+        border-color: #3b82f6;
+      }
+    }
+  </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <!-- Navigation -->
   <nav class="bg-white shadow-sm py-4 sticky top-0 z-10">
-    <div
-      class="container mx-auto px-4 flex justify-between items-center"
-    >
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <!-- Soldaki logo -->
       <a href="#" class="text-2xl font-bold text-blue-600">MGL</a>
+
+      <!-- Sağdaki menü -->
       <div class="hidden md:flex space-x-8">
-        <a
-          href="index.html"
-          class="nav-link text-gray-700 hover:text-blue-600 transition duration-300"
-          >Ana Sayfa</a
-        >
-        <a
-          href="hakkimda.html"
-          class="nav-link text-blue-600 font-medium"
-          >Hakkımda</a
-        >
-        <a
-          href="blog.html"
-          class="nav-link text-gray-700 hover:text-blue-600 transition duration-300"
-          >Blog</a
-        >
-        <a
-          href="iletisim.html"
-          class="nav-link text-gray-700 hover:text-blue-600 transition duration-300"
-          >İletişim</a
-        >
+        <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Ana Sayfa</a>
+        <a href="hakkimda.html" class="nav-link text-blue-600 font-medium">Hakkımda</a>
+        <a href="blog.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Blog</a>
+        <a href="iletisim.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">İletişim</a>
+        <a href="oyun.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Oyun</a>
       </div>
+
+      <!-- Mobil menü butonu -->
       <button id="mobile-menu-button" class="md:hidden text-gray-700">
         <i class="fas fa-bars text-xl"></i>
       </button>
@@ -96,26 +84,11 @@
 
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-md">
-      <a
-        href="index.html"
-        class="block py-2 text-gray-700 hover:text-blue-600"
-        >Ana Sayfa</a
-      >
-      <a
-        href="hakkimda.html"
-        class="block py-2 text-blue-600 font-medium"
-        >Hakkımda</a
-      >
-      <a
-        href="blog.html"
-        class="block py-2 text-gray-700 hover:text-blue-600"
-        >Blog</a
-      >
-      <a
-        href="iletisim.html"
-        class="block py-2 text-gray-700 hover:text-blue-600"
-        >İletişim</a
-      >
+      <a href="index.html" class="block py-2 text-gray-700 hover:text-blue-600">Ana Sayfa</a>
+      <a href="hakkimda.html" class="block py-2 text-blue-600 font-medium">Hakkımda</a>
+      <a href="blog.html" class="block py-2 text-gray-700 hover:text-blue-600">Blog</a>
+      <a href="iletisim.html" class="block py-2 text-gray-700 hover:text-blue-600">İletişim</a>
+      <a href="oyun.html" class="block py-2 text-gray-700 hover:text-blue-600">Oyun</a>
     </div>
   </nav>
 
@@ -348,4 +321,7 @@
       menu.classList.toggle("hidden");
     });
 
-    // Typ
+    // Typing effect (boş bıraktığın için devamını yazmadım)
+  </script>
+</body>
+</html>
