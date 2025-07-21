@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hakkımda - Muhammed Güven Lotoz</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hakkımda - Muhammed Güven Lotoz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-    body {
-      font-family: "Poppins", sans-serif;
-      background-color: #f8fafc;
-    }
-
-    .nav-link {
-      position: relative;
-    }
-
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: #3b82f6;
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .profile-img {
-      transition: transform 0.3s ease;
-    }
-
-    .profile-img:hover {
-      transform: scale(1.05);
-    }
-
-    .typing-effect {
-      border-right: 2px solid;
-      animation: blink 0.75s step-end infinite;
-    }
-
-    @keyframes blink {
-      from,
-      to {
-        border-color: transparent;
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
       }
-      50% {
-        border-color: #3b82f6;
+
+      .nav-link {
+        position: relative;
       }
-    }
-  </style>
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #3b82f6;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .profile-img {
+        transition: transform 0.3s ease;
+      }
+
+      .profile-img:hover {
+        transform: scale(1.05);
+      }
+
+      .typing-effect {
+        border-right: 2px solid;
+        animation: blink 0.75s step-end infinite;
+      }
+
+      @keyframes blink {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #3b82f6;
+        }
+      }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <!-- Navigation -->
   <nav class="bg-white shadow-sm py-4 sticky top-0 z-10">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <!-- Soldaki logo -->
+    <div
+      class="container mx-auto px-4 flex justify-between items-center"
+    >
       <a href="#" class="text-2xl font-bold text-blue-600">MGL</a>
-
-      <!-- Sağdaki menü -->
       <div class="hidden md:flex space-x-8">
-        <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Ana Sayfa</a>
+        <a
+                 <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Ana Sayfa</a>
         <a href="hakkimda.html" class="nav-link text-blue-600 font-medium">Hakkımda</a>
         <a href="blog.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Blog</a>
         <a href="iletisim.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">İletişim</a>
@@ -89,6 +89,7 @@
       <a href="blog.html" class="block py-2 text-gray-700 hover:text-blue-600">Blog</a>
       <a href="iletisim.html" class="block py-2 text-gray-700 hover:text-blue-600">İletişim</a>
       <a href="oyun.html" class="block py-2 text-gray-700 hover:text-blue-600">Oyun</a>
+      >
     </div>
   </nav>
 
@@ -321,7 +322,48 @@
       menu.classList.toggle("hidden");
     });
 
-    // Typing effect (boş bıraktığın için devamını yazmadım)
+    // Yazıp silen yazı efekti
+    const texts = [
+      "Web geliştirici",
+      "Teknoloji meraklısı",
+      "Kodlama tutkunu"
+    ];
+    const typingText = document.getElementById("typing-text");
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let typing = true;
+
+    function typeDeleteLoop() {
+      const currentText = texts[textIndex];
+
+      if (typing) {
+        // Yazma işlemi
+        if (charIndex < currentText.length) {
+          typingText.textContent += currentText.charAt(charIndex);
+          charIndex++;
+          setTimeout(typeDeleteLoop, 100);
+        } else {
+          // Yazma bitti, biraz bekle sonra silmeye başla
+          typing = false;
+          setTimeout(typeDeleteLoop, 1500);
+        }
+      } else {
+        // Silme işlemi
+        if (charIndex > 0) {
+          typingText.textContent = currentText.substring(0, charIndex - 1);
+          charIndex--;
+          setTimeout(typeDeleteLoop, 50);
+        } else {
+          // Silme bitti, sonraki metne geç
+          typing = true;
+          textIndex = (textIndex + 1) % texts.length;
+          setTimeout(typeDeleteLoop, 500);
+        }
+      }
+    }
+
+    typeDeleteLoop();
   </script>
 </body>
 </html>
