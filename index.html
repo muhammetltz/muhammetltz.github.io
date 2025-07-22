@@ -5,81 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Muhammed Güven Lotoz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>.chat-button {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ffffffcc; /* Yarı saydam beyaz */
-    color: #333;
-    padding: 8px 14px;
-    font-size: 14px;
-    border-radius: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-decoration: none;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-    opacity: 0.5;
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-.chat-button:hover {
-    opacity: 1;
-}
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
 
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: #f8fafc;
-        color: #1e293b;
-      }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
 
-      .gradient-text {
-        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
-      .card-hover {
-        transition: all 0.3s ease;
-      }
+        .nav-link {
+            position: relative;
+        }
 
-      .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-          0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
 
-      .nav-link {
-        position: relative;
-      }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
 
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -2px;
-        left: 0;
-        background-color: #3b82f6;
-        transition: width 0.3s ease;
-      }
+        .nav-link.active {
+            color: #3b82f6;
+            font-weight: 600;
+        }
 
-      .nav-link:hover::after,
-      .nav-link.active::after {
-        width: 100%;
-      }
+        /* Sohbet Butonu */
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #1e293b;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-decoration: none;
+            z-index: 100;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
 
-      /* Aktif link rengi ve kalınlığı */
-      .nav-link.active {
-        color: #3b82f6;
-        font-weight: 600;
-      }
+        .chat-button:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.95);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -161,14 +160,14 @@
                     </a>
                     <a href="https://instagram.com/muhammetltz" class="text-gray-400 hover:text-white transition duration-300" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <i class="fab fa-instagram"></i>
-                        <!-- Bu satırı </body> etiketinden hemen önce ekle -->
-<a href="sohbet.html" class="chat-button">💬</a>
-
                     </a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <!-- Sohbet Butonu -->
+    <a href="sohbet.html" class="chat-button" aria-label="Sohbet">💬</a>
 
     <script>
         // Mobile menu toggle
