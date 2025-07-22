@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sesli/Görüntülü Sohbet Odası</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100vh;
+      display: flex; justify-content: center; align-items: center;
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      flex-direction: column;
+    }
+    iframe {
+      width: 90vw;
+      height: 80vh;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #000;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Canlı Sesli/Görüntülü Sohbet</h1>
+
+  <iframe
+    src="https://meet.jit.si/Türk Discord"
+    allow="camera; microphone; fullscreen; display-capture"
+    allowfullscreen
+  ></iframe>
+
+</body>
+</html>
