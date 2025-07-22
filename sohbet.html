@@ -147,6 +147,8 @@
       <button id="sendBtn" disabled>Gönder</button>
     </div>
     <button id="logoutBtn">Çıkış Yap</button>
+    <button id="voiceChatBtn" style="background:#009688;">Sesli Sohbete Geç</button>
+
   </div>
 
 <script type="module">
@@ -330,6 +332,10 @@
     activeUsersDiv.innerHTML = '';
     messagesDiv.innerHTML = '';
   });
+  document.getElementById('voiceChatBtn').addEventListener('click', () => {
+  window.location.href = 'seslisohbet.html';
+});
+
 </script>
 
 </body>
