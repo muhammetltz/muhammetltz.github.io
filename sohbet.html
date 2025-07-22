@@ -17,7 +17,7 @@
       width: 100%; max-width: 420px;
     }
     #login { display: block; }
-    #chat { display: none; height: 90vh; display: flex; flex-direction: column; }
+    #chat { display: none; height: 90vh; flex-direction: column; }
 
     h2 { text-align: center; margin-top: 0; }
 
@@ -32,10 +32,7 @@
       border: none; background: #1976d2; color: white; border-radius: 4px;
       cursor: pointer;
     }
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
+    button:disabled { background: #999; cursor: not-allowed; }
 
     #activeUsers {
       margin-top: 15px;
@@ -89,7 +86,6 @@
       border-bottom-left-radius: 0;
     }
 
-    /* Mesaj input + gönder butonu */
     #messageInputContainer {
       display: flex;
       margin-top: 10px;
@@ -118,7 +114,6 @@
       background: #999;
       cursor: not-allowed;
     }
-
     #logoutBtn {
       margin-top: 15px;
       background: #f44336;
@@ -142,18 +137,15 @@
     <div id="loginError" style="color: red; margin-top: 10px; display:none;"></div>
   </div>
 
-  <div id="chat">
+  <div id="chat" style="display:none;">
     <h2>Hoşgeldin, <span id="userDisplay"></span></h2>
     <div><strong>Aktif Kullanıcılar:</strong></div>
     <div id="activeUsers"></div>
-
     <div id="messages"></div>
-
     <div id="messageInputContainer">
       <input type="text" id="messageInput" placeholder="Mesaj yaz..." autocomplete="off" />
       <button id="sendBtn" disabled>Gönder</button>
     </div>
-
     <button id="logoutBtn">Çıkış Yap</button>
   </div>
 
@@ -202,14 +194,14 @@
     loginError.style.display = 'none';
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-    if(!username || !password) return;
+    if (!username || !password) return;
 
     try {
       const usersRef = ref(db, 'users');
       const userSnapshot = await get(child(usersRef, username));
-      if(userSnapshot.exists()) {
+      if (userSnapshot.exists()) {
         const userData = userSnapshot.val();
-        if(userData.password !== password) {
+        if (userData.password !== password) {
           loginError.textContent = 'Hatalı şifre.';
           loginError.style.display = 'block';
           return;
@@ -251,13 +243,13 @@
     onValue(usersRef, (snapshot) => {
       activeUsersDiv.innerHTML = '';
       const users = snapshot.val() || {};
-      for(let user in users) {
-        if(users[user].active) {
+      for (let user in users) {
+        if (users[user].active) {
           const span = document.createElement('span');
           span.textContent = user;
           span.classList.toggle('self', user === currentUser);
           span.onclick = () => {
-            if(user === currentUser) {
+            if (user === currentUser) {
               alert("Kendinizle sohbet edemezsiniz.");
               return;
             }
@@ -275,7 +267,7 @@
   }
 
   function loadChatMessages(user1, user2) {
-    if(messagesRef) off(messagesRef);
+    if (messagesRef) off(messagesRef);
     messagesDiv.innerHTML = '';
     sendBtn.disabled = false;
     messageInput.disabled = false;
@@ -301,7 +293,7 @@
 
   sendBtn.addEventListener('click', async () => {
     const text = messageInput.value.trim();
-    if(!text || !currentChatUser) return;
+    if (!text || !currentChatUser) return;
 
     const chatId = currentUser < currentChatUser ? currentUser + '_' + currentChatUser : currentChatUser + '_' + currentUser;
     const msgRef = push(ref(db, 'messages/' + chatId));
@@ -315,13 +307,13 @@
   });
 
   messageInput.addEventListener('keydown', e => {
-    if(e.key === 'Enter' && !sendBtn.disabled) {
+    if (e.key === 'Enter' && !sendBtn.disabled) {
       sendBtn.click();
     }
   });
 
   logoutBtn.addEventListener('click', async () => {
-    if(!currentUser) return;
+    if (!currentUser) return;
     await update(ref(db, 'users/' + currentUser), {
       active: false,
       lastSeen: Date.now()
