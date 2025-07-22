@@ -9,7 +9,27 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <style>
+    <style>.chat-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffffcc; /* Yarı saydam beyaz */
+    color: #333;
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-decoration: none;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    opacity: 0.5;
+}
+
+.chat-button:hover {
+    opacity: 1;
+}
+
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
       body {
@@ -141,6 +161,9 @@
                     </a>
                     <a href="https://instagram.com/muhammetltz" class="text-gray-400 hover:text-white transition duration-300" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <i class="fab fa-instagram"></i>
+                        <!-- Bu satırı </body> etiketinden hemen önce ekle -->
+<a href="sohbet.html" class="chat-button">💬</a>
+
                     </a>
                 </div>
             </div>
