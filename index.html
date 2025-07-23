@@ -3,191 +3,342 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Muhammed Güven Lotoz</title>
+    <title>Hakkımda - Muhammed Güven Lotoz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-        body {
-            font-family: "Poppins", sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
-        }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
 
-        .gradient-text {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+      .nav-link {
+        position: relative;
+      }
 
-        .card-hover {
-            transition: all 0.3s ease;
-        }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #3b82f6;
+        transition: width 0.3s ease;
+      }
 
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-                        0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
+      .nav-link:hover::after {
+        width: 100%;
+      }
 
-        .nav-link {
-            position: relative;
-        }
+      .profile-img {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        border-radius: 9999px; /* tam yuvarlak */
+        box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        border: 4px solid white;
+      }
 
-        .nav-link::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
-        }
+      .profile-img:hover {
+        transform: scale(1.08);
+        box-shadow: 0 20px 30px -5px rgba(59, 130, 246, 0.6);
+      }
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
+      .typing-effect {
+        border-right: 2px solid;
+        animation: blink 0.75s step-end infinite;
+      }
 
-        .nav-link.active {
-            color: #3b82f6;
-            font-weight: 600;
+      @keyframes blink {
+        from,
+        to {
+          border-color: transparent;
         }
-
-        /* Sohbet Butonu */
-        .chat-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.7);
-            color: #1e293b;
-            padding: 8px 16px;
-            font-size: 14px;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            text-decoration: none;
-            z-index: 100;
-            opacity: 0.4;
-            transition: all 0.3s ease;
+        50% {
+          border-color: #3b82f6;
         }
-
-        .chat-button:hover {
-            opacity: 1;
-            background-color: rgba(255, 255, 255, 0.95);
-        }
+      }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-white shadow-sm py-6">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold gradient-text">MGL</h1>
-            <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
-            <nav class="hidden md:flex space-x-8">
-                <a href="https://muhammedguvenlotoz.com/index.html" class="nav-link active font-medium">Ana Sayfa</a>
-                <a href="https://muhammedguvenlotoz.com/hakkimda.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">Hakkımda</a>
-                <a href="https://muhammedguvenlotoz.com/blog.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">Blog</a>
-                <a href="https://muhammedguvenlotoz.com/iletisim.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">İletişim</a>
-                <a href="oyun.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Oyun</a>
-            </nav>
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm py-4 sticky top-0 z-10">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-blue-600">MGL</a>
+      <div class="hidden md:flex space-x-8">
+        <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Ana Sayfa</a>
+        <a href="hakkimda.html" class="nav-link text-blue-600 font-medium">Hakkımda</a>
+        <a href="blog.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Blog</a>
+        <a href="iletisim.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">İletişim</a>
+        <a href="oyun.html" class="nav-link text-gray-700 hover:text-blue-600 transition duration-300">Oyun</a>
+      </div>
+
+      <!-- Mobil menü butonu -->
+      <button id="mobile-menu-button" class="md:hidden text-gray-700">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-md">
+      <a href="index.html" class="block py-2 text-gray-700 hover:text-blue-600">Ana Sayfa</a>
+      <a href="hakkimda.html" class="block py-2 text-blue-600 font-medium">Hakkımda</a>
+      <a href="blog.html" class="block py-2 text-gray-700 hover:text-blue-600">Blog</a>
+      <a href="iletisim.html" class="block py-2 text-gray-700 hover:text-blue-600">İletişim</a>
+      <a href="oyun.html" class="block py-2 text-gray-700 hover:text-blue-600">Oyun</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center gap-8 mb-12">
+        <div class="w-full md:w-1/3 flex justify-center" data-aos="zoom-in">
+          <div class="profile-img w-64 h-64 rounded-full overflow-hidden shadow-lg">
+            <img
+              src="https://i.imgur.com/aOQMHT7.jpeg"
+              alt="Muhammed Güven Lotoz"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white py-4 px-4 shadow-md">
-            <div class="flex flex-col space-y-3">
-                <a href="https://muhammedguvenlotoz.com/index.html" class="nav-link active font-medium">Ana Sayfa</a>
-                <a href="https://muhammedguvenlotoz.com/hakkimda.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">Hakkımda</a>
-                <a href="https://muhammedguvenlotoz.com/blog.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">Blog</a>
-                <a href="https://muhammedguvenlotoz.com/iletisim.html" class="nav-link text-gray-700 hover:text-blue-500 font-medium">İletişim</a>
-                <a href="oyun.html" class="block py-2 text-gray-700 hover:text-blue-600">Oyun</a>
-            </div>
+        <div class="w-full md:w-2/3 text-center md:text-left">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4" data-aos="fade-up">
+            Merhaba, Ben <span class="text-blue-600">Muhammed</span>
+          </h1>
+          <div class="text-xl text-gray-600 mb-6 h-8" data-aos="fade-up" data-aos-delay="100">
+            <span id="typing-text" class="typing-effect"></span>
+          </div>
+          <p class="text-gray-700 mb-6" data-aos="fade-up" data-aos-delay="150">
+            Web geliştirme, teknoloji ve kodlama ile ilgileniyorum. Bu siteyi,
+            öğrendiklerimi paylaşmak ve pratik yapmak için oluşturdum.
+          </p>
+          <div class="flex justify-center md:justify-start space-x-4" data-aos="fade-up" data-aos-delay="200">
+            <a
+              href="https://www.youtube.com/@muhammetltz"
+              target="_blank"
+              class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full transition duration-300 flex items-center shadow"
+              ><i class="fab fa-youtube mr-2"></i> YouTube</a
+            >
+            <a
+              href="https://twitter.com/muhammetltz"
+              target="_blank"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full transition duration-300 flex items-center shadow"
+              ><i class="fab fa-twitter mr-2"></i> Twitter</a
+            >
+            <a
+              href="https://www.instagram.com/muhammetltz/"
+              target="_blank"
+              class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full transition duration-300 flex items-center shadow"
+              ><i class="fab fa-instagram mr-2"></i> Instagram</a
+            >
+          </div>
         </div>
-    </header>
+      </div>
 
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-12">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-            <!-- Hero Text -->
-            <div class="lg:w-1/2">
-                <div class="mb-8">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-4">Merhaba, ben Muhammed <span class="wave">👋</span></h2>
-                    <p class="text-xl text-gray-600 mb-8">Kişisel web siteme hoş geldiniz! Benimle ilgili daha fazla bilgi edinmek, yazılarımı okumak veya iletişime geçmek için aşağıdaki bağlantıları kullanabilirsiniz.</p>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap gap-4">
-                    <a href="https://muhammedguvenlotoz.com/hakkimda.html" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center">
-                        <i class="fas fa-user mr-2"></i> Hakkımda
-                    </a>
-                    <a href="https://muhammedguvenlotoz.com/blog.html" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center">
-                        <i class="fas fa-blog mr-2"></i> Blog
-                    </a>
-                    <a href="https://muhammedguvenlotoz.com/iletisim.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center">
-                        <i class="fas fa-envelope mr-2"></i> İletişim
-                    </a>
-                </div>
+      <div class="bg-white rounded-xl shadow-md p-8 mb-12" data-aos="fade-up">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
+          Hakkımda Daha Fazlası
+        </h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <i class="fas fa-code text-blue-500 mr-3"></i> Becerilerim
+            </h3>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                HTML, CSS, JavaScript
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                React, Vue.js
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                Node.js, Express
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                MongoDB, PostgreSQL
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <i class="fas fa-graduation-cap text-blue-500 mr-3"></i> Eğitim
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <h4 class="font-medium text-gray-800">
+                  İnşaat Mühendisliği
+                </h4>
+                <p class="text-gray-600 text-sm">
+                  Ondokuz Mayıs Üniversitesi, 2024-202?
+                </p>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-800">Samsun</h4>
+                <p class="text-gray-600 text-sm">Atakum</p>
+              </div>
             </div>
-            
-            <!-- Image -->
-            <div class="lg:w-1/2 flex justify-center">
-                <div class="relative group">
-                    <div class="absolute -inset-2 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
-                    <img src="https://picsum.photos/600/400" alt="Muhammed Güven Lotoz" class="relative rounded-lg shadow-xl w-full max-w-md h-auto object-cover border-4 border-white">
-                </div>
-            </div>
+          </div>
         </div>
-    </main>
+      </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <h2 class="text-xl font-bold">Muhammed Güven Lotoz</h2>
-                    <p class="text-gray-400">© 2025 Tüm hakları saklıdır.</p>
-                </div>
-                <div class="flex space-x-6 text-2xl">
-                    <a href="https://twitter.com/muhammetltz" class="text-gray-400 hover:text-white transition duration-300" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@muhammetltz" class="text-gray-400 hover:text-white transition duration-300" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://instagram.com/muhammetltz" class="text-gray-400 hover:text-white transition duration-300" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
+      <div class="bg-white rounded-xl shadow-md p-8" data-aos="fade-up" data-aos-delay="100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
+          Projelerim
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="border rounded-lg overflow-hidden hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-delay="200">
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+              alt="Proje 1"
+              class="w-full h-40 object-cover"
+              loading="lazy"
+            />
+            <div class="p-4">
+              <h3 class="font-semibold text-lg mb-2">E-Ticaret Sitesi</h3>
+              <p class="text-gray-600 text-sm mb-3">
+                React ve Node.js kullanılarak geliştirilen tam stack e-ticaret
+                uygulaması.
+              </p>
+              <a href="#" class="text-blue-500 text-sm font-medium hover:underline">Detayları Gör</a>
             </div>
+          </div>
+          <div class="border rounded-lg overflow-hidden hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-delay="300">
+            <img
+              src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80"
+              alt="Proje 2"
+              class="w-full h-40 object-cover"
+              loading="lazy"
+            />
+            <div class="p-4">
+              <h3 class="font-semibold text-lg mb-2">Blog Platformu</h3>
+              <p class="text-gray-600 text-sm mb-3">
+                Vue.js ve Firebase ile oluşturulmuş dinamik blog sitesi.
+              </p>
+              <a href="#" class="text-blue-500 text-sm font-medium hover:underline">Detayları Gör</a>
+            </div>
+          </div>
+          <div class="border rounded-lg overflow-hidden hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-delay="400">
+            <img
+              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80"
+              alt="Proje 3"
+              class="w-full h-40 object-cover"
+              loading="lazy"
+            />
+            <div class="p-4">
+              <h3 class="font-semibold text-lg mb-2">Mobil Oyun</h3>
+              <p class="text-gray-600 text-sm mb-3">
+                Unity kullanarak geliştirdiğim basit 2D mobil oyun.
+              </p>
+              <a href="#" class="text-blue-500 text-sm font-medium hover:underline">Detayları Gör</a>
+            </div>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </main>
 
-    <!-- Sohbet Butonu -->
-    <a href="sohbet.html" class="chat-button" aria-label="Sohbet">💬</a>
+  <!-- Footer -->
+  <footer class="bg-white border-t py-6 mt-12">
+    <div
+      class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center"
+    >
+      <p class="text-gray-600 text-sm">
+        © 2025 Muhammed Güven Lotoz. Tüm hakları saklıdır.
+      </p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a
+          href="https://www.youtube.com/@muhammetltz"
+          target="_blank"
+          class="text-red-600 hover:text-red-700 transition"
+          aria-label="YouTube"
+          ><i class="fab fa-youtube fa-lg"></i
+        ></a>
+        <a
+          href="https://twitter.com/muhammetltz"
+          target="_blank"
+          class="text-blue-500 hover:text-blue-600 transition"
+          aria-label="Twitter"
+          ><i class="fab fa-twitter fa-lg"></i
+        ></a>
+        <a
+          href="https://www.instagram.com/muhammetltz/"
+          target="_blank"
+          class="text-pink-500 hover:text-pink-600 transition"
+          aria-label="Instagram"
+          ><i class="fab fa-instagram fa-lg"></i
+        ></a>
+      </div>
+    </div>
+  </footer>
 
-    <script>
-        // Mobile menu toggle
-        document.getElementById("menu-toggle").addEventListener("click", function () {
-            const menu = document.getElementById("mobile-menu");
-            menu.classList.toggle("hidden");
-        });
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById("mobile-menu-button");
+    const menu = document.getElementById("mobile-menu");
 
-        // Wave animation for the emoji
-        const wave = document.querySelector(".wave");
-        let angle = 0;
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
 
-        function waveAnimation() {
-            angle += 0.05;
-            const rotation = Math.sin(angle) * 15;
-            wave.style.transform = `rotate(${rotation}deg)`;
-            requestAnimationFrame(waveAnimation);
+    // Yazıp silen yazı efekti
+    const texts = [
+      "Web geliştirici",
+      "Teknoloji meraklısı",
+      "Kodlama tutkunu"
+    ];
+    const typingText = document.getElementById("typing-text");
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 120;
+
+    function type() {
+      const currentText = texts[textIndex];
+      if (!isDeleting) {
+        typingText.textContent = currentText.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentText.length) {
+          isDeleting = true;
+          typingSpeed = 1500;
+        } else {
+          typingSpeed = 120;
         }
+      } else {
+        typingText.textContent = currentText.slice(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          isDeleting = false;
+          textIndex = (textIndex + 1) % texts.length;
+          typingSpeed = 500;
+        } else {
+          typingSpeed = 60;
+        }
+      }
+      setTimeout(type, typingSpeed);
+    }
+    type();
+  </script>
 
-        waveAnimation();
-    </script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: "ease-in-out",
+    });
+  </script>
 </body>
 </html>
