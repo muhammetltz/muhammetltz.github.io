@@ -245,42 +245,139 @@
     </div>
   </main>
 
+ <!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hakkımda - Muhammed Güven Lotoz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f8fafc;
+    }
+
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #3b82f6;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .profile-img {
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      border-radius: 9999px;
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+      border: 4px solid white;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 20px 30px -5px rgba(59, 130, 246, 0.6);
+    }
+
+    .typing-effect {
+      border-right: 2px solid;
+      animation: blink 0.75s step-end infinite;
+    }
+
+    @keyframes blink {
+      from, to {
+        border-color: transparent;
+      }
+      50% {
+        border-color: #3b82f6;
+      }
+    }
+
+    /* Sohbet buton stili */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .sohbet-btn {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 500;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      animation: bounce 2s infinite;
+    }
+
+    .sohbet-btn:hover {
+      background-color: rgba(59, 130, 246, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <!-- (Buradaki kodlar aynı kalıyor) -->
+
+  <!-- Main Content -->
+  <!-- (Buradaki kodlar aynı kalıyor) -->
+
   <!-- Footer -->
   <footer class="bg-white border-t py-6 mt-12">
-    <div
-      class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center"
-    >
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
       <p class="text-gray-600 text-sm">
         © 2025 Muhammed Güven Lotoz. Tüm hakları saklıdır.
       </p>
       <div class="flex space-x-6 mt-4 md:mt-0">
-        <a
-          href="https://www.youtube.com/@muhammetltz"
-          target="_blank"
-          class="text-red-600 hover:text-red-700 transition"
-          aria-label="YouTube"
-          ><i class="fab fa-youtube fa-lg"></i
-        ></a>
-        <a
-          href="https://twitter.com/muhammetltz"
-          target="_blank"
-          class="text-blue-500 hover:text-blue-600 transition"
-          aria-label="Twitter"
-          ><i class="fab fa-twitter fa-lg"></i
-        ></a>
-        <a
-          href="https://www.instagram.com/muhammetltz/"
-          target="_blank"
-          class="text-pink-500 hover:text-pink-600 transition"
-          aria-label="Instagram"
-          ><i class="fab fa-instagram fa-lg"></i
-        ></a>
+        <a href="https://www.youtube.com/@muhammetltz" target="_blank" class="text-red-600 hover:text-red-700 transition" aria-label="YouTube">
+          <i class="fab fa-youtube fa-lg"></i>
+        </a>
+        <a href="https://twitter.com/muhammetltz" target="_blank" class="text-blue-500 hover:text-blue-600 transition" aria-label="Twitter">
+          <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a href="https://www.instagram.com/muhammetltz/" target="_blank" class="text-pink-500 hover:text-pink-600 transition" aria-label="Instagram">
+          <i class="fab fa-instagram fa-lg"></i>
+        </a>
       </div>
+    </div>
+
+    <!-- ✅ Sohbete Başla Butonu -->
+    <div class="flex justify-center mt-6">
+      <a href="sohbet.html" class="sohbet-btn">
+        💬 Sohbete Başla
+      </a>
     </div>
   </footer>
 
+  <!-- Scriptler -->
   <script>
-    // Mobile menu toggle
     const btn = document.getElementById("mobile-menu-button");
     const menu = document.getElementById("mobile-menu");
 
