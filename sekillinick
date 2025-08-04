@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Şekilli Nick</title>
+  <style>
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Şekilli Nick Tasarımı</h1>
+
+  <iframe src="https://sekillinick.com.tr/"></iframe>
+
+</body>
+</html>
