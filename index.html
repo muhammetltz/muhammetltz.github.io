@@ -56,6 +56,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-main);
+            text-decoration: none;
         }
         .logo span { color: var(--primary); }
 
@@ -96,6 +97,7 @@
         }
 
         .btn {
+            display: inline-block;
             padding: 12px 30px;
             border-radius: 5px;
             background: linear-gradient(45deg, var(--primary), #d97706);
@@ -142,7 +144,7 @@
             width: 300px;
             height: 300px;
             object-fit: cover;
-            border-radius: 50%; /* Daire şeklinde resim */
+            border-radius: 50%;
             border: 4px solid var(--primary);
             box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
         }
@@ -196,8 +198,13 @@
             border-top: 1px solid var(--glass-border);
             color: var(--text-muted);
         }
+        .socials { margin-bottom: 20px; }
         .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 15px; transition: 0.3s; }
-        .socials a:hover { color: var(--primary); }
+        
+        /* Footer İkon Renkleri */
+        .socials a.tw:hover { color: #1DA1F2; transform: scale(1.2); }
+        .socials a.yt:hover { color: #FF0000; transform: scale(1.2); }
+        .socials a.ig:hover { color: #E1306C; transform: scale(1.2); }
 
         @keyframes fadeInUp {
             from { transform: translateY(30px); opacity: 0; }
@@ -217,13 +224,14 @@
     <canvas id="canvas-container"></canvas>
 
     <header>
-        <div class="logo">MGL<span>.ENG</span></div>
+        <a href="index.html" class="logo">MGL<span>.ENG</span></a>
         <nav>
             <ul>
                 <li><a href="#about">Hakkımda</a></li>
                 <li><a href="#skills">Yetenekler</a></li>
                 <li><a href="#portfolio">Projeler</a></li>
-                <li><a href="#contact">İletişim</a></li>
+                <li><a href="oyun.html">Oyun</a></li>
+                <li><a href="iletisim.html">İletişim</a></li>
             </ul>
         </nav>
     </header>
@@ -238,12 +246,12 @@
         <h2 class="section-title">Hakkımda & Vizyonum</h2>
         <div class="about-content">
             <div class="about-image">
-                <img src="https://imgur.com/a/PG1eOsU" alt="Muhammed Güven Lotoz">
+                <img src="https://placehold.co/300x300/f59e0b/white?text=MGL" alt="Muhammed Güven Lotoz">
             </div>
             <div class="about-text">
                 <p>Merhaba, ben Muhammed. Ondokuz Mayıs Üniversitesi'nde İnşaat Mühendisliği okuyan, teknolojiyi sadece tüketmeyi değil, onunla üretmeyi seven bir mühendis adayıyım.</p>
                 <p>Hedefim; statik ve dinamik gibi temel mühendislik prensiplerini, yazılım (Python, Excel) ve 3D görselleştirme (Unity, Render) yeteneklerimle birleştirerek, inşaat sektörüne modern ve yenilikçi bir bakış açısı getirmektir.</p>
-                <a href="#contact" style="color:var(--primary); text-decoration:none; font-weight:bold;">İletişime Geç &rarr;</a>
+                <a href="iletisim.html" style="color:var(--primary); text-decoration:none; font-weight:bold;">İletişime Geç &rarr;</a>
             </div>
         </div>
     </section>
@@ -316,20 +324,20 @@
         </div>
     </section>
 
-    <section id="contact">
+    <section id="contact-cta" style="text-align:center; margin-bottom:50px;">
         <h2 class="section-title">İletişim</h2>
         <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
             <p>Staj, proje işbirlikleri veya sorularınız için bana ulaşabilirsiniz.</p>
             <br>
-            <a href="mailto:muhammedguvenlotoz@gmail.com" class="btn">E-Posta Gönder</a>
+            <a href="iletisim.html" class="btn">İletişim Sayfasına Git</a>
         </div>
     </section>
 
     <footer>
         <div class="socials">
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-github"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/muhammetltz" target="_blank" class="tw"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@muhammetltz" target="_blank" class="yt"><i class="fab fa-youtube"></i></a>
+            <a href="https://instagram.com/muhammetltz" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
         </div>
         <p>&copy; 2025 Muhammed Güven Lotoz. İnşaat Mühendisliği Öğrencisi.</p>
     </footer>
