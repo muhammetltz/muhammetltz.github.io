@@ -2,48 +2,39 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Fizik Testi | MGL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MGL Fizik Lab</title>
     <style>
-        :root { --bg-color: #0f172a; --primary: #f59e0b; --secondary: #38bdf8; --text-main: #f1f5f9; }
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); user-select: none; }
+        :root { --bg: #0f172a; --primary: #f59e0b; }
+        body { margin: 0; overflow: hidden; background: var(--bg); color: white; font-family: sans-serif; touch-action: none; /* DOKUNMATİK KAYDIRMAYI KAPAT */ }
 
-        /* MOBİL HEADER (Daha kompakt) */
+        /* HEADER (KÜÇÜK VE ÜSTTE) */
         header {
-            position: absolute; top: 0; width: 100%; padding: 15px;
+            position: absolute; top: 0; left: 0; width: 100%; padding: 10px 15px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 10; pointer-events: none;
+            z-index: 10; pointer-events: none; box-sizing: border-box;
         }
-        .home-btn {
+        .back-btn {
             pointer-events: auto; text-decoration: none; color: white; 
-            background: rgba(255,255,255,0.15); padding: 8px 15px; border-radius: 20px;
-            backdrop-filter: blur(5px); font-weight: 600; font-size: 0.9rem;
+            background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 0.9rem;
         }
 
-        /* MOBİL OYUN PANELİ */
-        #ui-container {
+        /* OYUN PANELİ (ALTTA SABİT) */
+        #ui {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.9); padding: 15px; border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1); text-align: center;
-            width: 95%; max-width: 500px; pointer-events: none; z-index: 100;
+            width: 90%; max-width: 400px; background: rgba(15, 23, 42, 0.9);
+            padding: 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; pointer-events: none;
         }
-        
-        .controls { display: flex; gap: 8px; justify-content: center; pointer-events: auto; }
-
-        /* BUTONLAR (Parmak dostu) */
+        .controls { display: flex; gap: 5px; pointer-events: auto; }
         .btn {
-            flex: 1; padding: 15px 10px; border-radius: 12px; font-weight: 600; font-size: 1rem;
-            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            flex: 1; padding: 12px 5px; border-radius: 8px; border: none; 
+            background: rgba(255,255,255,0.1); color: white; font-weight: bold; font-size: 0.9rem;
         }
-        .btn i { font-size: 1.2rem; }
-        .btn.active { background: var(--primary); color: black; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
-        .btn.danger { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
-
-        #instruction {
-            position: absolute; top: 20%; width: 100%; text-align: center;
-            pointer-events: none; opacity: 0.8; font-size: 0.9rem; text-shadow: 0 0 5px black;
-        }
+        .btn.active { background: var(--primary); color: black; }
+        .btn.danger { background: rgba(220, 38, 38, 0.4); }
+        
+        #info { position: absolute; top: 50px; width: 100%; text-align: center; opacity: 0.7; pointer-events: none; font-size: 0.8rem; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="importmap">
@@ -51,27 +42,20 @@
     </script>
 </head>
 <body>
-
     <header>
-        <a href="index.html" class="home-btn"><i class="fas fa-chevron-left"></i> Geri</a>
-        <div style="font-weight:bold; font-size:1rem; text-shadow: 0 0 5px black;">MGL<span style="color:var(--primary)">.LAB</span></div>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Geri</a>
+        <div style="font-weight:bold;">MGL<span style="color:var(--primary)">.LAB</span></div>
     </header>
 
-    <div id="instruction">🏗️ Dokunarak İnşa Et • Çift Parmakla Çevir</div>
+    <div id="info">Dokunarak İnşa Et • Çift Parmak: Kamera</div>
 
-    <div id="ui-container">
+    <div id="ui">
         <div class="controls">
-            <button class="btn active" id="btn-build" onclick="setMode('build')">
-                <i class="fas fa-hammer"></i> İnşa
-            </button>
-            <button class="btn" id="btn-test" onclick="setMode('test')">
-                <i class="fas fa-meteor"></i> Test
-            </button>
-            <button class="btn danger" onclick="resetWorld()">
-                <i class="fas fa-trash"></i> Sil
-            </button>
+            <button class="btn active" id="b-build" onclick="setMode('build')">İnşa</button>
+            <button class="btn" id="b-test" onclick="setMode('test')">Test</button>
+            <button class="btn danger" onclick="reset()">Sil</button>
         </div>
-        <div style="margin-top:10px; font-size:0.75rem; color:#94a3b8;">Nesne: <span id="count">0</span></div>
+        <div style="margin-top:5px; font-size:0.7rem; color:#aaa;">Nesne: <span id="cnt">0</span></div>
     </div>
 
     <script type="module">
@@ -80,117 +64,97 @@
         import * as CANNON from 'cannon-es';
 
         let camera, scene, renderer, world, raycaster, mouse;
-        let objectsToUpdate = [], clickableObjects = [];
-        let mode = 'build';
-
-        init(); animate();
+        let objects=[], clickable=[];
+        let mode='build';
 
         function init() {
-            scene = new THREE.Scene(); scene.background = new THREE.Color(0x0f172a); scene.fog = new THREE.Fog(0x0f172a, 20, 100);
-            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 500);
-            camera.position.set(12, 12, 16);
+            scene = new THREE.Scene(); scene.background=new THREE.Color(0x0f172a); scene.fog=new THREE.Fog(0x0f172a,20,100);
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 500);
+            camera.position.set(10,15,15);
 
             // Işıklar
-            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-            dirLight.position.set(10, 30, 10); scene.add(dirLight);
+            scene.add(new THREE.AmbientLight(0xffffff,0.6));
+            const dl = new THREE.DirectionalLight(0xffffff,1.5); dl.position.set(10,30,10); scene.add(dl);
 
             // Fizik
-            world = new CANNON.World(); world.gravity.set(0, -9.82, 0); world.broadphase = new CANNON.SAPBroadphase(world);
+            world = new CANNON.World(); world.gravity.set(0,-9.82,0); world.broadphase = new CANNON.SAPBroadphase(world);
 
             // Zemin
-            const grid = new THREE.GridHelper(100, 50, 0x38bdf8, 0x1e293b); scene.add(grid);
+            const grid = new THREE.GridHelper(100,50,0x38bdf8,0x1e293b); scene.add(grid);
+            const floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(200,200), new THREE.MeshBasicMaterial({visible:false}));
+            floorMesh.rotation.x = -Math.PI/2; scene.add(floorMesh); clickable.push(floorMesh);
             
-            const floorGeo = new THREE.PlaneGeometry(200, 200);
-            const floorMat = new THREE.MeshBasicMaterial({ visible: false }); // Görünmez tıklama alanı
-            const floorMesh = new THREE.Mesh(floorGeo, floorMat);
-            floorMesh.rotation.x = -Math.PI / 2; scene.add(floorMesh);
-            clickableObjects.push(floorMesh);
+            const floorBody = new CANNON.Body({mass:0, shape:new CANNON.Plane()});
+            floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -Math.PI/2); world.addBody(floorBody);
 
-            const floorBody = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
-            floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI * 0.5);
-            world.addBody(floorBody);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({antialias:true});
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
             const controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; 
-            
+            controls.enableDamping=true;
+
             raycaster = new THREE.Raycaster(); mouse = new THREE.Vector2();
 
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight);
+            window.addEventListener('resize', ()=>{
+                camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth,window.innerHeight);
             });
-            
-            // MOBİL DOKUNMATİK DESTEĞİ
-            renderer.domElement.addEventListener('pointerdown', onPointerDown);
+
+            renderer.domElement.addEventListener('pointerdown', onTouch);
         }
 
         function createBox(pos) {
-            const mesh = new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshStandardMaterial({ color: 0x94a3b8 }));
-            mesh.position.copy(pos); scene.add(mesh); clickableObjects.push(mesh);
-            
-            const body = new CANNON.Body({ mass: 5, position: new CANNON.Vec3(pos.x, pos.y, pos.z), shape: new CANNON.Box(new CANNON.Vec3(1,1,1)) });
-            world.addBody(body); objectsToUpdate.push({ mesh, body });
-            updateCount();
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshStandardMaterial({color:0x94a3b8}));
+            mesh.position.copy(pos); scene.add(mesh); clickable.push(mesh);
+            const body = new CANNON.Body({mass:5, position:new CANNON.Vec3(pos.x,pos.y,pos.z), shape:new CANNON.Box(new CANNON.Vec3(1,1,1))});
+            world.addBody(body); objects.push({mesh,body}); updateCnt();
         }
 
         function createBall(pos, vel) {
-            const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.8), new THREE.MeshStandardMaterial({ color: 0xf59e0b }));
+            const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.7), new THREE.MeshStandardMaterial({color:0xf59e0b}));
             mesh.position.copy(pos); scene.add(mesh);
-            const body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(pos.x, pos.y, pos.z), shape: new CANNON.Sphere(0.8) });
-            body.velocity.copy(vel); world.addBody(body); objectsToUpdate.push({ mesh, body });
-            updateCount();
+            const body = new CANNON.Body({mass:10, position:new CANNON.Vec3(pos.x,pos.y,pos.z), shape:new CANNON.Sphere(0.7)});
+            body.velocity.copy(vel); world.addBody(body); objects.push({mesh,body}); updateCnt();
         }
 
-        function onPointerDown(event) {
-            if(event.target.tagName === 'BUTTON') return; // UI'a tıklama
-            
-            // Talimatı gizle
-            document.getElementById('instruction').style.opacity = 0;
-
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        function onTouch(e) {
+            if(e.target.tagName==='BUTTON') return;
+            mouse.x=(e.clientX/window.innerWidth)*2-1; mouse.y=-(e.clientY/window.innerHeight)*2+1;
             raycaster.setFromCamera(mouse, camera);
-            
-            const intersects = raycaster.intersectObjects(clickableObjects);
-            if (intersects.length > 0) {
-                const hit = intersects[0];
-                if (mode === 'build') {
-                    const gridSize = 2;
-                    const tx = Math.round(hit.point.x / gridSize) * gridSize;
-                    const tz = Math.round(hit.point.z / gridSize) * gridSize;
-                    // Zeminse yukarı, kutuysa yanına/üstüne
-                    let ty = (hit.face.normal.y > 0.5) ? hit.point.y + 1 : hit.point.y;
-                    if (ty < 1) ty = 1; // Yerin altına girme
-                    createBox(new THREE.Vector3(tx, ty, tz));
+            const hits = raycaster.intersectObjects(clickable);
+            if(hits.length>0) {
+                const hit=hits[0];
+                if(mode==='build') {
+                    const tx=Math.round(hit.point.x/2)*2; const tz=Math.round(hit.point.z/2)*2;
+                    let ty=(hit.face.normal.y>0.5)? hit.point.y+1 : hit.point.y; if(ty<1) ty=1;
+                    createBox(new THREE.Vector3(tx,ty,tz));
                 } else {
-                    const start = camera.position.clone();
-                    const dir = new THREE.Vector3().subVectors(hit.point, start).normalize();
-                    createBall(start.add(dir.multiplyScalar(3)), new CANNON.Vec3(dir.x*30, dir.y*30, dir.z*30));
+                    const start=camera.position.clone();
+                    const dir=new THREE.Vector3().subVectors(hit.point,start).normalize();
+                    createBall(start.add(dir.multiplyScalar(3)), new CANNON.Vec3(dir.x*30,dir.y*30,dir.z*30));
                 }
             }
         }
 
-        function animate() {
-            requestAnimationFrame(animate); world.step(1/60);
-            objectsToUpdate.forEach(o => { o.mesh.position.copy(o.body.position); o.mesh.quaternion.copy(o.body.quaternion); });
+        function anim() {
+            requestAnimationFrame(anim); world.step(1/60);
+            objects.forEach(o=>{ o.mesh.position.copy(o.body.position); o.mesh.quaternion.copy(o.body.quaternion); });
             renderer.render(scene, camera);
         }
-        function updateCount() { document.getElementById('count').innerText = objectsToUpdate.length; }
         
-        window.setMode = (m) => {
-            mode = m; document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + m).classList.add('active');
+        function updateCnt(){ document.getElementById('cnt').innerText=objects.length; }
+
+        window.setMode=(m)=>{
+            mode=m; document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+            document.getElementById('b-'+m).classList.add('active');
         }
-        window.resetWorld = () => {
-            objectsToUpdate.forEach(o => { world.removeBody(o.body); scene.remove(o.mesh); });
-            objectsToUpdate = []; clickableObjects = clickableObjects.filter(o => o.geometry.type === 'PlaneGeometry');
-            updateCount();
+        window.reset=()=>{
+            objects.forEach(o=>{ world.removeBody(o.body); scene.remove(o.mesh); });
+            objects=[]; clickable=clickable.filter(o=>o.geometry.type==='PlaneGeometry'); updateCnt();
         }
+
+        init(); anim();
     </script>
 </body>
 </html>
