@@ -6,11 +6,10 @@
     <title>Muhammed Güven Lotoz | İnşaat Mühendisi Adayı</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- MODERN MÜHENDİS TASARIMI --- */
         :root {
             --bg-color: #0f172a;
-            --primary: #f59e0b; /* Turuncu - Baret/Saha Rengi */
-            --secondary: #38bdf8; /* Mavi - Teknik Çizim Rengi */
+            --primary: #f59e0b;
+            --secondary: #38bdf8;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #f1f5f9;
@@ -20,218 +19,116 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* --- ARKA PLAN --- */
         #canvas-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
         }
 
-        /* --- HEADER --- */
+        /* HEADER & MOBİL MENÜ */
         header {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid var(--glass-border);
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--glass-border);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            text-decoration: none;
-        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--text-main); text-decoration: none; }
         .logo span { color: var(--primary); }
 
+        /* Masaüstü Menü */
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a {
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: 0.3s;
-        }
+        nav a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; }
         nav a:hover { color: var(--primary); }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
+        /* Mobil Menü İkonu (Başlangıçta Gizli) */
+        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--text-main); }
+
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; } /* İkonu göster */
+            
+            nav {
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid var(--primary);
+                display: none; /* Gizle */
+                flex-direction: column; padding: 20px; text-align: center;
+            }
+            nav.active { display: flex; } /* JS ile açılacak */
+            
+            nav ul { flex-direction: column; gap: 20px; }
+            nav a { display: block; font-size: 1.2rem; padding: 10px; }
+            
+            .hero h1 { font-size: 2.2rem; }
+            .about-content { flex-direction: column; }
+            .about-image img { width: 200px; height: 200px; }
+            section { padding: 60px 5%; }
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease forwards;
-            opacity: 0;
+        /* DİĞER STİLLER (Hero, Cards vb.) */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; animation: fadeInUp 1s ease forwards; }
+        .hero h2 { font-size: 1.5rem; color: var(--secondary); margin-bottom: 30px; animation: fadeInUp 1s ease 0.3s forwards; opacity: 0; }
+        
+        .btn {
+            padding: 12px 30px; border-radius: 5px; background: linear-gradient(45deg, var(--primary), #d97706);
+            color: white; text-decoration: none; font-weight: bold; display: inline-block;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); transition: 0.3s; animation: fadeInUp 1s ease 0.6s forwards; opacity: 0;
         }
         
-        .hero h2 {
-            font-size: 1.5rem;
-            color: var(--secondary);
-            margin-bottom: 30px;
-            font-weight: 400;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            border-radius: 5px;
-            background: linear-gradient(45deg, var(--primary), #d97706);
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.6s forwards;
-        }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(245, 158, 11, 0.5); }
-
-        /* --- SECTIONS --- */
         section { padding: 100px 10%; }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            position: relative;
-        }
-        .section-title::after {
-            content: ''; display: block; width: 80px; height: 4px;
-            background: var(--primary); margin: 10px auto 0;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        /* --- ABOUT SECTION WITH IMAGE --- */
-        .about-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 50px;
-        }
-
-        .about-image img {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid var(--primary);
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-        }
-
-        .about-text {
-            flex: 1;
-            max-width: 600px;
-        }
-
-        .about-text p {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
-
-        /* --- CARDS --- */
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
+        
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        
         .card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            transition: 0.4s;
+            background: var(--glass); border: 1px solid var(--glass-border); padding: 30px;
+            border-radius: 10px; backdrop-filter: blur(5px); transition: 0.4s;
         }
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .card i { color: var(--secondary); margin-bottom: 20px; }
-        .card h3 { margin-bottom: 15px; color: var(--text-main); }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card i { color: var(--secondary); margin-bottom: 15px; }
+        .card h3 { margin-bottom: 10px; color: var(--text-main); }
         .card p { color: var(--text-muted); font-size: 0.95rem; }
 
-        /* --- SKILL TAGS --- */
         .skill-tag {
-            display: inline-block;
-            padding: 5px 15px;
-            margin: 5px 3px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: var(--secondary);
+            display: inline-block; padding: 5px 10px; margin: 3px;
+            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 4px; font-size: 0.8rem; color: var(--secondary);
         }
 
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: rgba(15, 23, 42, 0.9);
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
+        .about-content { display: flex; align-items: center; justify-content: center; gap: 50px; }
+        .about-image img {
+            width: 300px; height: 300px; object-fit: cover; border-radius: 50%;
+            border: 4px solid var(--primary); box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
         }
-        .socials { margin-bottom: 20px; }
-        .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 15px; transition: 0.3s; }
+        .about-text { flex: 1; max-width: 600px; }
+        .about-text p { margin-bottom: 20px; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 40px; background: rgba(15, 23, 42, 0.9); border-top: 1px solid var(--glass-border); color: var(--text-muted); }
+        .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 10px; }
         
-        /* Footer İkon Renkleri */
-        .socials a.tw:hover { color: #1DA1F2; transform: scale(1.2); }
-        .socials a.yt:hover { color: #FF0000; transform: scale(1.2); }
-        .socials a.ig:hover { color: #E1306C; transform: scale(1.2); }
-
-        @keyframes fadeInUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            nav { display: none; }
-            .about-content { flex-direction: column; text-align: center; }
-            .about-image img { width: 200px; height: 200px; }
-        }
+        @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
-
     <canvas id="canvas-container"></canvas>
 
     <header>
         <a href="index.html" class="logo">MGL<span>.ENG</span></a>
-        <nav>
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <nav id="navbar">
             <ul>
-                <li><a href="#about">Hakkımda</a></li>
-                <li><a href="#skills">Yetenekler</a></li>
-                <li><a href="#portfolio">Projeler</a></li>
-                <li><a href="oyun.html">Oyun</a></li>
-                <li><a href="iletisim.html">İletişim</a></li>
+                <li><a href="#about" onclick="toggleMenu()">Hakkımda</a></li>
+                <li><a href="#skills" onclick="toggleMenu()">Yetenekler</a></li>
+                <li><a href="#portfolio" onclick="toggleMenu()">Projeler</a></li>
+                <li><a href="oyun.html" onclick="toggleMenu()">Oyun</a></li>
+                <li><a href="iletisim.html" onclick="toggleMenu()">İletişim</a></li>
             </ul>
         </nav>
     </header>
@@ -243,220 +140,145 @@
     </section>
 
     <section id="about">
-        <h2 class="section-title">Hakkımda & Vizyonum</h2>
+        <h2 class="section-title">Hakkımda</h2>
         <div class="about-content">
             <div class="about-image">
-                <img src="ben.jpeg" alt="Muhammed Güven Lotoz">
+                <img src="https://placehold.co/300x300/f59e0b/white?text=MGL" alt="Muhammed Güven Lotoz">
             </div>
             <div class="about-text">
-                <p>Merhaba, ben Muhammed. Ondokuz Mayıs Üniversitesi'nde İnşaat Mühendisliği okuyan, teknolojiyi sadece tüketmeyi değil, onunla üretmeyi seven bir mühendis adayıyım.</p>
-                <p>Hedefim; statik ve dinamik gibi temel mühendislik prensiplerini, yazılım (Python, Excel) ve 3D görselleştirme (Unity, Render) yeteneklerimle birleştirerek, inşaat sektörüne modern ve yenilikçi bir bakış açısı getirmektir.</p>
-                <a href="iletisim.html" style="color:var(--primary); text-decoration:none; font-weight:bold;">İletişime Geç &rarr;</a>
+                <p>Merhaba, ben Muhammed. Ondokuz Mayıs Üniversitesi İnşaat Mühendisliği öğrencisiyim. Mühendislik disiplinini modern yazılım teknolojileriyle birleştiriyorum.</p>
+                <a href="iletisim.html" style="color:var(--primary); font-weight:bold;">İletişime Geç &rarr;</a>
             </div>
         </div>
     </section>
 
     <section id="skills">
-        <h2 class="section-title">Teknik Yetkinlikler</h2>
+        <h2 class="section-title">Yetenekler</h2>
         <div class="grid-container">
             <div class="card">
                 <i class="fas fa-drafting-compass fa-2x"></i>
-                <h3>Mühendislik & CAD</h3>
-                <p>Sektör standardı tasarım ve analiz araçları.</p>
+                <h3>Mühendislik</h3>
                 <br>
-                <div>
-                    <span class="skill-tag">AutoCAD</span>
-                    <span class="skill-tag">SAP2000</span>
-                    <span class="skill-tag">İdeCAD</span>
-                    <span class="skill-tag">Revit (Learning)</span>
-                </div>
+                <div><span class="skill-tag">AutoCAD</span> <span class="skill-tag">SAP2000</span> <span class="skill-tag">İdeCAD</span></div>
             </div>
             <div class="card">
                 <i class="fas fa-laptop-code fa-2x"></i>
-                <h3>Yazılım & Geliştirme</h3>
-                <p>Mühendislik çözümlerini destekleyen kodlama becerileri.</p>
+                <h3>Yazılım</h3>
                 <br>
-                <div>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">Web (HTML/CSS/JS)</span>
-                    <span class="skill-tag">Unity Engine</span>
-                    <span class="skill-tag">C#</span>
-                </div>
-            </div>
-             <div class="card">
-                <i class="fas fa-cube fa-2x"></i>
-                <h3>Diğer İlgi Alanları</h3>
-                <p>Kişisel gelişim ve teknik hobiler.</p>
-                <br>
-                <div>
-                    <span class="skill-tag">3D Animasyon</span>
-                    <span class="skill-tag">Motosiklet Mekaniği</span>
-                    <span class="skill-tag">Video Edit</span>
-                </div>
+                <div><span class="skill-tag">Python</span> <span class="skill-tag">Web Dev</span> <span class="skill-tag">Unity</span></div>
             </div>
         </div>
     </section>
 
     <section id="portfolio">
-        <h2 class="section-title">Geliştirme & Projeler</h2>
+        <h2 class="section-title">Projeler</h2>
         <div class="grid-container">
             <div class="card">
-                <i class="fas fa-building fa-2x" style="color:var(--primary)"></i>
-                <h3>3D Mimari Görselleştirme</h3>
-                <p>Yapı projelerinin sunumu için animasyon ve render çalışmaları. Teknik detayların estetik ile buluştuğu 3D modellemeler.</p>
-                <br>
-                <a href="#" style="color:var(--primary); text-decoration:none; font-weight:bold;">Detaylar &rarr;</a>
+                <i class="fas fa-building fa-2x"></i>
+                <h3>Mimari Görselleştirme</h3>
+                <p>3D modelleme ve render çalışmaları.</p>
             </div>
             <div class="card">
-                <i class="fas fa-gamepad fa-2x" style="color:var(--primary)"></i>
-                <h3>Fizik Tabanlı Simülasyon</h3>
-                <p>Unity oyun motoru kullanılarak geliştirilen, fizik kurallarının (Newton yasaları, çarpışma) işlendiği interaktif projeler.</p>
-                <br>
-                <a href="#" style="color:var(--primary); text-decoration:none; font-weight:bold;">Detaylar &rarr;</a>
+                <i class="fas fa-gamepad fa-2x"></i>
+                <h3>Fizik Simülasyonu</h3>
+                <p>Unity tabanlı yapı statiği oyunları.</p>
             </div>
             <div class="card">
-                <i class="fas fa-calculator fa-2x" style="color:var(--primary)"></i>
-                <h3>Mühendislik Hesap Otomasyonu</h3>
-                <p>Karmaşık statik hesaplamaları hızlandırmak için geliştirilen Excel makroları ve Python tabanlı basit araçlar.</p>
-                <br>
-                <a href="#" style="color:var(--primary); text-decoration:none; font-weight:bold;">Detaylar &rarr;</a>
+                <i class="fas fa-calculator fa-2x"></i>
+                <h3>Hesap Otomasyonu</h3>
+                <p>Excel ve Python destekli analiz araçları.</p>
             </div>
         </div>
     </section>
 
-    <section id="contact-cta" style="text-align:center; margin-bottom:50px;">
-        <h2 class="section-title">İletişim</h2>
-        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <p>Staj, proje işbirlikleri veya sorularınız için bana ulaşabilirsiniz.</p>
-            <br>
-            <a href="iletisim.html" class="btn">İletişim Sayfasına Git</a>
-        </div>
+    <section style="text-align:center;">
+        <a href="iletisim.html" class="btn">İletişim Sayfasına Git</a>
     </section>
 
     <footer>
         <div class="socials">
-            <a href="https://twitter.com/muhammetltz" target="_blank" class="tw"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@muhammetltz" target="_blank" class="yt"><i class="fab fa-youtube"></i></a>
-            <a href="https://instagram.com/muhammetltz" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/muhammetltz" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@muhammetltz" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://instagram.com/muhammetltz" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p>&copy; 2025 Muhammed Güven Lotoz. İnşaat Mühendisliği Öğrencisi.</p>
+        <p>&copy; 2025 Muhammed Güven Lotoz.</p>
     </footer>
 
     <script>
-        // TYPING ANIMATION
-        const textElement = document.getElementById('typing-text');
-        const texts = ["İnşaat Mühendisliği Öğrencisi", "Teknoloji Tutkunu", "Ondokuz Mayıs Üniversitesi"];
-        let count = 0;
-        let index = 0;
-        let currentText = "";
-        let letter = "";
+        // MOBİL MENÜ FONKSİYONU
+        function toggleMenu() {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('active');
+        }
 
+        // TYPING EFFECT
+        const textElement = document.getElementById('typing-text');
+        const texts = ["İnşaat Mühendisliği Öğrencisi", "Teknoloji Tutkunu"];
+        let count = 0, index = 0, currentText = "", letter = "";
         (function type() {
-            if (count === texts.length) { count = 0; }
+            if (count === texts.length) count = 0;
             currentText = texts[count];
             letter = currentText.slice(0, ++index);
             textElement.textContent = letter;
             if (letter.length === currentText.length) {
-                count++;
-                index = 0;
-                setTimeout(type, 2000);
-            } else {
-                setTimeout(type, 100);
-            }
+                count++; index = 0; setTimeout(type, 2000);
+            } else setTimeout(type, 100);
         })();
 
-        // NETWORK ANIMATION (Stable & Engineering Style)
+        // CANVAS (Performanslı)
         const canvas = document.getElementById("canvas-container");
         const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let particlesArray;
-        let mouse = { x: null, y: null, radius: (canvas.height/80) * (canvas.width/80) }
-
-        window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x; mouse.y = event.y;
-        });
-
+        
         class Particle {
-            constructor(x, y, directionX, directionY, size, color) {
-                this.x = x; this.y = y;
-                this.directionX = directionX; this.directionY = directionY;
-                this.size = size; this.color = color;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = '#38bdf8';
-                ctx.fill();
+            constructor(x, y, size) {
+                this.x = x; this.y = y; this.size = size;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
             }
             update() {
-                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
-                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
-                
-                // Mouse Interaction
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx*dx + dy*dy);
-                if (distance < mouse.radius + this.size){
-                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) { this.x += 10; }
-                    if (mouse.x > this.x && this.x > this.size * 10) { this.x -= 10; }
-                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) { this.y += 10; }
-                    if (mouse.y > this.y && this.y > this.size * 10) { this.y -= 10; }
-                }
-                this.x += this.directionX; this.y += this.directionY;
-                this.draw();
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = '#38bdf8'; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
 
         function init() {
             particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 12000;
+            // Mobilde daha az parçacık (Kasma yapmasın diye)
+            let numberOfParticles = (window.innerWidth < 768) ? 30 : 80;
             for (let i = 0; i < numberOfParticles; i++) {
-                let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 0.4) - 0.2;
-                let directionY = (Math.random() * 0.4) - 0.2;
-                let color = '#38bdf8';
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                let size = Math.random() * 2 + 1;
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                particlesArray.push(new Particle(x, y, size));
             }
         }
-
-        function connect() {
-            let opacityValue = 1;
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                    if (distance < (canvas.width/7) * (canvas.height/7)) {
-                        opacityValue = 1 - (distance/20000);
-                        ctx.strokeStyle = 'rgba(56, 189, 248,' + opacityValue + ')';
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update(); particlesArray[i].draw();
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 100) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/100})`;
+                        ctx.lineWidth = 1; ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y); ctx.stroke();
                     }
                 }
             }
-        }
-
-        function animate() {
             requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, innerWidth, innerHeight);
-            for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
-            connect();
         }
-
-        window.addEventListener('resize', function() {
-            canvas.width = innerWidth; canvas.height = innerHeight;
-            mouse.radius = ((canvas.height/80) * (canvas.height/80));
-            init();
-        });
-
-        init();
-        animate();
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+        init(); animate();
     </script>
 </body>
 </html>
