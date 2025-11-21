@@ -3,117 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muhammed Güven Lotoz | İnşaat Mühendisi Adayı</title>
+    <title>Muhammed Güven Lotoz | Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- TEMEL AYARLAR (TAŞMAYI ENGELLEME) --- */
         :root {
-            --bg-color: #0f172a;
-            --primary: #f59e0b;
-            --secondary: #38bdf8;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+            --bg-color: #0f172a; --primary: #f59e0b; --secondary: #38bdf8;
+            --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f1f5f9; --text-muted: #94a3b8;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
+            font-family: 'Segoe UI', sans-serif; background: var(--bg-color);
+            color: var(--text-main); line-height: 1.6;
+            overflow-x: hidden; /* YATAY KAYDIRMAYI KAPATIR */
+            width: 100%;
         }
 
-        #canvas-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-        }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); }
 
-        /* HEADER & MOBİL MENÜ */
+        /* HEADER */
         header {
-            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            position: fixed; top: 0; width: 100%; padding: 15px 5%;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; backdrop-filter: blur(10px);
-            background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--glass-border);
+            z-index: 1000; backdrop-filter: blur(10px); background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid var(--glass-border);
         }
-
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--text-main); text-decoration: none; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--text-main); text-decoration: none; }
         .logo span { color: var(--primary); }
 
-        /* Masaüstü Menü */
-        nav ul { display: flex; list-style: none; gap: 30px; }
+        /* MENÜ */
+        nav ul { display: flex; list-style: none; gap: 20px; }
         nav a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; }
-        nav a:hover { color: var(--primary); }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: white; }
 
-        /* Mobil Menü İkonu (Başlangıçta Gizli) */
-        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--text-main); }
-
-        /* MOBİL UYUMLULUK */
+        /* MOBİL MENÜ DÜZENİ */
         @media (max-width: 768px) {
-            .menu-toggle { display: block; } /* İkonu göster */
-            
+            .menu-toggle { display: block; }
             nav {
                 position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid var(--primary);
-                display: none; /* Gizle */
-                flex-direction: column; padding: 20px; text-align: center;
+                background: rgba(15, 23, 42, 0.98); border-bottom: 1px solid var(--primary);
+                flex-direction: column; padding: 20px; display: none;
             }
-            nav.active { display: flex; } /* JS ile açılacak */
-            
-            nav ul { flex-direction: column; gap: 20px; }
-            nav a { display: block; font-size: 1.2rem; padding: 10px; }
-            
-            .hero h1 { font-size: 2.2rem; }
-            .about-content { flex-direction: column; }
-            .about-image img { width: 200px; height: 200px; }
-            section { padding: 60px 5%; }
+            nav.active { display: flex; }
+            nav ul { flex-direction: column; gap: 15px; text-align: center; }
+            nav a { display: block; padding: 10px; font-size: 1.1rem; }
         }
 
-        /* DİĞER STİLLER (Hero, Cards vb.) */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; animation: fadeInUp 1s ease forwards; }
-        .hero h2 { font-size: 1.5rem; color: var(--secondary); margin-bottom: 30px; animation: fadeInUp 1s ease 0.3s forwards; opacity: 0; }
+        /* HERO SECTION */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 80px 20px 20px; }
+        .hero h1 { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 15px; } /* Responsive Font */
+        .hero h2 { font-size: clamp(1rem, 3vw, 1.5rem); color: var(--secondary); margin-bottom: 30px; }
         
         .btn {
             padding: 12px 30px; border-radius: 5px; background: linear-gradient(45deg, var(--primary), #d97706);
             color: white; text-decoration: none; font-weight: bold; display: inline-block;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); transition: 0.3s; animation: fadeInUp 1s ease 0.6s forwards; opacity: 0;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
         }
-        
-        section { padding: 100px 10%; }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
-        
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        
+
+        /* SECTION GENEL */
+        section { padding: 60px 5%; width: 100%; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; position: relative; }
+        .section-title::after { content:''; display:block; width:60px; height:3px; background:var(--primary); margin:10px auto 0; }
+
+        /* ABOUT */
+        .about-content { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; text-align: center; }
+        .about-image img { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary); }
+        .about-text { max-width: 600px; }
+
+        /* CARDS */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .card {
-            background: var(--glass); border: 1px solid var(--glass-border); padding: 30px;
-            border-radius: 10px; backdrop-filter: blur(5px); transition: 0.4s;
+            background: var(--glass); border: 1px solid var(--glass-border); padding: 25px;
+            border-radius: 10px; transition: 0.3s;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card i { color: var(--secondary); margin-bottom: 15px; }
-        .card h3 { margin-bottom: 10px; color: var(--text-main); }
-        .card p { color: var(--text-muted); font-size: 0.95rem; }
+        .skill-tag { display: inline-block; padding: 4px 10px; margin: 2px; background: rgba(56,189,248,0.1); border-radius: 4px; font-size: 0.85rem; color: var(--secondary); }
 
-        .skill-tag {
-            display: inline-block; padding: 5px 10px; margin: 3px;
-            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 4px; font-size: 0.8rem; color: var(--secondary);
-        }
+        /* FOOTER */
+        footer { text-align: center; padding: 30px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid var(--glass-border); }
+        .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 12px; transition: 0.3s; }
+        .socials a:hover { color: var(--primary); }
 
-        .about-content { display: flex; align-items: center; justify-content: center; gap: 50px; }
-        .about-image img {
-            width: 300px; height: 300px; object-fit: cover; border-radius: 50%;
-            border: 4px solid var(--primary); box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-        }
-        .about-text { flex: 1; max-width: 600px; }
-        .about-text p { margin-bottom: 20px; color: var(--text-muted); }
-
-        footer { text-align: center; padding: 40px; background: rgba(15, 23, 42, 0.9); border-top: 1px solid var(--glass-border); color: var(--text-muted); }
-        .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 10px; }
-        
-        @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -127,8 +98,8 @@
                 <li><a href="#about" onclick="toggleMenu()">Hakkımda</a></li>
                 <li><a href="#skills" onclick="toggleMenu()">Yetenekler</a></li>
                 <li><a href="#portfolio" onclick="toggleMenu()">Projeler</a></li>
-                <li><a href="oyun.html" onclick="toggleMenu()">Oyun</a></li>
-                <li><a href="iletisim.html" onclick="toggleMenu()">İletişim</a></li>
+                <li><a href="oyun.html">Oyun</a></li>
+                <li><a href="iletisim.html" style="color:var(--primary)">İletişim</a></li>
             </ul>
         </nav>
     </header>
@@ -146,8 +117,8 @@
                 <img src="ben.jpeg" alt="Muhammed Güven Lotoz">
             </div>
             <div class="about-text">
-                <p>Merhaba, ben Muhammed. Ondokuz Mayıs Üniversitesi İnşaat Mühendisliği öğrencisiyim. Mühendislik disiplinini modern yazılım teknolojileriyle birleştiriyorum.</p>
-                <a href="iletisim.html" style="color:var(--primary); font-weight:bold;">İletişime Geç &rarr;</a>
+                <p style="margin-bottom:20px; color:var(--text-muted);">Ondokuz Mayıs Üniversitesi İnşaat Mühendisliği öğrencisiyim. Statik projeleri modern yazılım teknolojileriyle birleştiriyorum.</p>
+                <a href="iletisim.html" style="color:var(--primary); font-weight:bold; text-decoration:none;">İletişime Geç &rarr;</a>
             </div>
         </div>
     </section>
@@ -156,16 +127,16 @@
         <h2 class="section-title">Yetenekler</h2>
         <div class="grid-container">
             <div class="card">
-                <i class="fas fa-drafting-compass fa-2x"></i>
+                <i class="fas fa-drafting-compass fa-2x" style="color:var(--primary)"></i>
                 <h3>Mühendislik</h3>
                 <br>
                 <div><span class="skill-tag">AutoCAD</span> <span class="skill-tag">SAP2000</span> <span class="skill-tag">İdeCAD</span></div>
             </div>
             <div class="card">
-                <i class="fas fa-laptop-code fa-2x"></i>
+                <i class="fas fa-code fa-2x" style="color:var(--secondary)"></i>
                 <h3>Yazılım</h3>
                 <br>
-                <div><span class="skill-tag">Python</span> <span class="skill-tag">Web Dev</span> <span class="skill-tag">Unity</span></div>
+                <div><span class="skill-tag">Python</span> <span class="skill-tag">HTML/CSS</span> <span class="skill-tag">Unity</span></div>
             </div>
         </div>
     </section>
@@ -174,26 +145,23 @@
         <h2 class="section-title">Projeler</h2>
         <div class="grid-container">
             <div class="card">
-                <i class="fas fa-building fa-2x"></i>
-                <h3>Mimari Görselleştirme</h3>
-                <p>3D modelleme ve render çalışmaları.</p>
+                <h3>3D Görselleştirme</h3>
+                <p style="font-size:0.9rem; color:#94a3b8;">Yapıların render ve animasyon çalışmaları.</p>
             </div>
             <div class="card">
-                <i class="fas fa-gamepad fa-2x"></i>
-                <h3>Fizik Simülasyonu</h3>
-                <p>Unity tabanlı yapı statiği oyunları.</p>
+                <h3>Yapı Statiği Oyunu</h3>
+                <p style="font-size:0.9rem; color:#94a3b8;">Unity tabanlı fizik simülasyonları.</p>
             </div>
             <div class="card">
-                <i class="fas fa-calculator fa-2x"></i>
-                <h3>Hesap Otomasyonu</h3>
-                <p>Excel ve Python destekli analiz araçları.</p>
+                <h3>Hesap Araçları</h3>
+                <p style="font-size:0.9rem; color:#94a3b8;">Excel ve Python otomasyonları.</p>
             </div>
         </div>
     </section>
-
-    <section style="text-align:center;">
+    
+    <div style="text-align:center; margin-bottom:50px;">
         <a href="iletisim.html" class="btn">İletişim Sayfasına Git</a>
-    </section>
+    </div>
 
     <footer>
         <div class="socials">
@@ -201,17 +169,12 @@
             <a href="https://www.youtube.com/@muhammetltz" target="_blank"><i class="fab fa-youtube"></i></a>
             <a href="https://instagram.com/muhammetltz" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p>&copy; 2025 Muhammed Güven Lotoz.</p>
+        <p style="margin-top:10px; font-size:0.9rem;">&copy; 2025 Muhammed Güven Lotoz.</p>
     </footer>
 
     <script>
-        // MOBİL MENÜ FONKSİYONU
-        function toggleMenu() {
-            const nav = document.getElementById('navbar');
-            nav.classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('navbar').classList.toggle('active'); }
 
-        // TYPING EFFECT
         const textElement = document.getElementById('typing-text');
         const texts = ["İnşaat Mühendisliği Öğrencisi", "Teknoloji Tutkunu"];
         let count = 0, index = 0, currentText = "", letter = "";
@@ -220,65 +183,30 @@
             currentText = texts[count];
             letter = currentText.slice(0, ++index);
             textElement.textContent = letter;
-            if (letter.length === currentText.length) {
-                count++; index = 0; setTimeout(type, 2000);
-            } else setTimeout(type, 100);
+            if (letter.length === currentText.length) { count++; index = 0; setTimeout(type, 2000); } 
+            else setTimeout(type, 100);
         })();
 
-        // CANVAS (Performanslı)
-        const canvas = document.getElementById("canvas-container");
-        const ctx = canvas.getContext("2d");
+        const canvas = document.getElementById("canvas-container"), ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let particlesArray;
-        
-        class Particle {
-            constructor(x, y, size) {
-                this.x = x; this.y = y; this.size = size;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = '#38bdf8'; ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-
+        let particles = [];
         function init() {
-            particlesArray = [];
-            // Mobilde daha az parçacık (Kasma yapmasın diye)
-            let numberOfParticles = (window.innerWidth < 768) ? 30 : 80;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = Math.random() * 2 + 1;
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particlesArray.push(new Particle(x, y, size));
-            }
+            particles = []; 
+            let num = (window.innerWidth < 768) ? 30 : 80; // Mobilde az partikül
+            for(let i=0; i<num; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:Math.random()-0.5, vy:Math.random()-0.5});
         }
-        
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update(); particlesArray[i].draw();
-                for (let j = i; j < particlesArray.length; j++) {
-                    const dx = particlesArray[i].x - particlesArray[j].x;
-                    const dy = particlesArray[i].y - particlesArray[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 100) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/100})`;
-                        ctx.lineWidth = 1; ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y); ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
+        function anim() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle='#38bdf8';
+            particles.forEach(p => {
+                p.x+=p.vx; p.y+=p.vy;
+                if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1;
+                ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(anim);
         }
-        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
-        init(); animate();
+        window.onresize = () => { canvas.width=window.innerWidth; canvas.height=window.innerHeight; init(); };
+        init(); anim();
     </script>
 </body>
 </html>
