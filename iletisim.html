@@ -6,66 +6,56 @@
     <title>İletişim | MGL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #0f172a; --primary: #f59e0b; --secondary: #38bdf8;
-            --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f1f5f9; --text-muted: #94a3b8;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        /* ANA CSS YAPISI */
+        :root { --bg-color: #0f172a; --primary: #f59e0b; --secondary: #38bdf8; --text-main: #f1f5f9; --glass: rgba(255,255,255,0.05); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:var(--bg-color); color:var(--text-main); width:100%; overflow-x:hidden; display:flex; flex-direction:column; min-height:100vh; }
         
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); }
+        #canvas-container { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background:radial-gradient(circle, #1e293b 0%, #0f172a 100%); }
 
         /* HEADER */
         header {
-            position: fixed; top: 0; width: 100%; padding: 15px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; backdrop-filter: blur(10px); background: rgba(15, 23, 42, 0.85);
-            border-bottom: 1px solid var(--glass-border);
+            position:fixed; top:0; width:100%; padding:15px 5%; display:flex; justify-content:space-between; align-items:center;
+            z-index:1000; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(255,255,255,0.1);
         }
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--text-main); text-decoration: none; }
-        .logo span { color: var(--primary); }
+        .logo { font-size:1.3rem; font-weight:700; color:white; text-decoration:none; }
+        .logo span { color:var(--primary); }
+        
+        .menu-toggle { display:none; font-size:1.5rem; cursor:pointer; }
+        nav ul { display:flex; gap:20px; list-style:none; }
+        nav a { color:white; text-decoration:none; }
 
-        nav ul { display: flex; list-style: none; gap: 20px; }
-        nav a { text-decoration: none; color: var(--text-main); transition: 0.3s; }
-        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; }
+        @media (max-width: 768px) {
+            .menu-toggle { display:block; }
+            nav { position:absolute; top:100%; left:0; width:100%; background:rgba(15,23,42,0.98); display:none; flex-direction:column; padding:20px; border-bottom:1px solid var(--primary); }
+            nav.active { display:flex; }
+            nav ul { flex-direction:column; text-align:center; }
+        }
 
-        /* CONTACT WRAPPER */
+        /* İLETİŞİM KUTUSU */
         .contact-wrapper {
-            margin-top: 100px; padding: 40px 10%; flex: 1;
-            display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;
+            margin-top:80px; padding:40px 5%; flex:1; display:flex; flex-wrap:wrap; justify-content:center; gap:30px;
         }
-        .contact-info, .contact-form-container { flex: 1; min-width: 300px; }
+        .info-col, .form-col { flex:1; min-width:300px; max-width:500px; }
 
         .info-card {
-            background: var(--glass); border: 1px solid var(--glass-border); padding: 20px;
-            border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px;
+            background:var(--glass); border:1px solid rgba(255,255,255,0.1); padding:20px; border-radius:10px; margin-bottom:15px;
+            display:flex; align-items:center; gap:15px;
         }
-        .info-icon { width: 40px; height: 40px; background: rgba(56, 189, 248, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--secondary); }
+        .icon-box { width:40px; height:40px; background:rgba(56,189,248,0.15); color:var(--secondary); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+        .info-text h4 { color:var(--primary); font-size:0.9rem; margin-bottom:2px; }
+        .info-text a { color:var(--text-main); text-decoration:none; font-size:0.95rem; }
 
-        .contact-form { background: var(--glass); border: 1px solid var(--glass-border); padding: 30px; border-radius: 15px; }
+        /* FORM */
+        .contact-form { background:var(--glass); padding:30px; border-radius:15px; border:1px solid rgba(255,255,255,0.1); }
         .input-field {
-            width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border); border-radius: 5px; color: white;
+            width:100%; padding:12px; margin-bottom:15px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); 
+            border-radius:5px; color:white; font-family:inherit;
         }
-        .submit-btn {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #d97706);
-            border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer;
-        }
+        .submit-btn { width:100%; padding:15px; background:var(--primary); border:none; border-radius:5px; font-weight:bold; cursor:pointer; }
 
-        footer { text-align: center; padding: 20px; background: rgba(15, 23, 42, 0.9); margin-top: auto; }
-        .socials a { color: var(--text-main); font-size: 1.5rem; margin: 0 10px; }
-
-        /* MOBIL STİLLER */
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            nav {
-                position: absolute; top: 100%; left: 0; width: 100%; display: none;
-                flex-direction: column; background: rgba(15, 23, 42, 0.95); padding: 20px;
-            }
-            nav.active { display: flex; }
-            nav ul { flex-direction: column; gap: 20px; text-align: center; }
-            .contact-wrapper { padding: 20px 5%; margin-top: 80px; }
-        }
+        footer { text-align:center; padding:30px; background:rgba(15,23,42,0.95); margin-top:auto; }
+        .socials a { font-size:1.5rem; margin:0 10px; color:white; }
     </style>
 </head>
 <body>
@@ -73,11 +63,10 @@
 
     <header>
         <a href="index.html" class="logo">MGL<span>.ENG</span></a>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-        <nav id="navbar">
+        <div class="menu-toggle" onclick="document.getElementById('nav').classList.toggle('active')"><i class="fas fa-bars"></i></div>
+        <nav id="nav">
             <ul>
                 <li><a href="index.html">Ana Sayfa</a></li>
-                <li><a href="index.html#portfolio">Projeler</a></li>
                 <li><a href="oyun.html">Oyun</a></li>
                 <li><a href="iletisim.html" style="color:var(--primary)">İletişim</a></li>
             </ul>
@@ -85,48 +74,46 @@
     </header>
 
     <div class="contact-wrapper">
-        <div class="contact-info">
-            <h2>Bana Ulaşın</h2>
-            <p style="margin-bottom:20px; color:var(--text-muted)">Sorularınız için yazabilirsiniz.</p>
+        <div class="info-col">
+            <h2 style="margin-bottom:20px;">Bana Ulaşın</h2>
+            <p style="margin-bottom:30px; color:#94a3b8;">Projeleriniz için iletişime geçebilirsiniz.</p>
             
             <div class="info-card">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div><h4>E-Posta</h4><p>muhammedguvenlotoz@gmail.com</p></div>
+                <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                <div class="info-text"><h4>E-Posta</h4><a href="mailto:muhammedguvenlotoz@gmail.com">muhammedguvenlotoz@gmail.com</a></div>
             </div>
             <div class="info-card">
-                <div class="info-icon"><i class="fab fa-instagram"></i></div>
-                <div><h4>Instagram</h4><a href="https://instagram.com/muhammetltz" style="color:var(--text-muted)">@muhammetltz</a></div>
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-text"><h4>Konum</h4><span>Samsun, Türkiye</span></div>
+            </div>
+            <div class="info-card">
+                <div class="icon-box"><i class="fab fa-instagram"></i></div>
+                <div class="info-text"><h4>Instagram</h4><a href="https://instagram.com/muhammetltz" target="_blank">@muhammetltz</a></div>
+            </div>
+             <div class="info-card">
+                <div class="icon-box"><i class="fab fa-youtube"></i></div>
+                <div class="info-text"><h4>YouTube</h4><a href="https://www.youtube.com/@muhammetltz" target="_blank">@muhammetltz</a></div>
             </div>
         </div>
 
-        <div class="contact-form-container">
+        <div class="form-col">
             <form class="contact-form" action="https://formspree.io/f/xgvzondn" method="POST">
-                <h3>Mesaj Gönder</h3>
-                <br>
+                <h3 style="margin-bottom:20px;">Mesaj Gönder</h3>
                 <input type="text" name="name" class="input-field" placeholder="Adınız" required>
-                <input type="email" name="email" class="input-field" placeholder="E-Posta" required>
+                <input type="email" name="email" class="input-field" placeholder="E-Posta Adresiniz" required>
                 <textarea name="message" rows="5" class="input-field" placeholder="Mesajınız" required></textarea>
-                <button type="submit" class="submit-btn">Gönder</button>
+                <button type="submit" class="submit-btn">GÖNDER</button>
             </form>
         </div>
     </div>
 
     <footer>
         <div class="socials">
-            <a href="https://twitter.com/muhammetltz"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@muhammetltz"><i class="fab fa-youtube"></i></a>
-            <a href="https://instagram.com/muhammetltz"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/muhammetltz" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@muhammetltz" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://instagram.com/muhammetltz" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p>&copy; 2025 Muhammed Güven Lotoz.</p>
+        <p style="margin-top:10px; font-size:0.8rem;">&copy; 2025 Muhammed Güven Lotoz.</p>
     </footer>
-
-    <script>
-        function toggleMenu() { document.getElementById('navbar').classList.toggle('active'); }
-        // Animasyon kodunun aynısı (Sadelik için kısalttım, ama çalışır)
-        const canvas = document.getElementById("canvas-container"), ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        function anim() { requestAnimationFrame(anim); ctx.clearRect(0,0,canvas.width,canvas.height); }
-        anim(); // Bu sayfada sadece arka plan temiz kalsın, çok parçacık olmasın form odaklı
-    </script>
 </body>
 </html>
